@@ -11,13 +11,40 @@ private:
   TH1F *_denominator;
   std::vector<TH1F*> _efficiencies;
   TFile *_file;
-  
+  const char *m_namefile;
+  const char *m_xtitle;
+  const char *m_ytitle;
+  const char *m_title;
+  float m_ymin;
+  float m_ymax;
+
 public:
   EfficiencyEvaluator(const char* namefile);
   ~EfficiencyEvaluator();
+  //! add a histogram as efficiency numerator
   void AddNumerator(TH1F *numerator) {_numerators.push_back(numerator);};
+  //! set the denominator for the finalk efficiency (typically generator)
   void SetDenominator(TH1F *denominator) {_denominator=denominator;};
+  //! compute eff wrt previous cut and absolute efficiency
   void ComputeEfficiencies();
+  //! write the efficiency histograms in a ROOT file
   void Write();
+  //! draw the cut / total efficiency histograms in a png file
+  void DrawSequential();
+  //! draw the single cut efficiency (wrt previous cut)
+  void DrawSingle();
+  //! draw both single and sequential
+  void DrawAll();
+  //! set the X axis title
+  void SetXaxisTitle(const char *title) { m_xtitle = title; }
+  //! set the Y axis title
+  void SetYaxisTitle(const char *title) { m_ytitle = title; }
+  //! set the histogram title
+  void SetTitle(const char *title) { m_title = title; }
+  //! set the histogram minimum
+  void SetYaxisMin(float min) { m_ymin = min; }
+  //! set the histogram maximum
+  void SetYaxisMax(float max) { m_ymax = max; }
+
 };
 #endif
