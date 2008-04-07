@@ -28,6 +28,8 @@ public:
   std::vector<int> getBits() { return m_requiredTriggers; }
   //! require a trigger by string
   void requireTrigger(const char* triggerString);
+  //! reset the list of required triggers
+  void clear() { m_requiredTriggers.clear(); }
   
 private:
 
