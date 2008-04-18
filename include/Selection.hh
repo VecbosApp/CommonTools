@@ -18,23 +18,30 @@ class Selection {
 public:
   Selection(std::string fileCuts, std::string fileSwitches);
   virtual ~Selection();
-  // add a cut to the selection
+  //! add a cut to the selection
   void addCut(std::string name);
-  // add a switch to enable something from file
+  //! add a switch to enable something from file
   void addSwitch(std::string name);
 
-  // retrieve selection configuration
+  //! retrieve selection configuration
   std::pair<float,float> getCut(std::string name);
   int getSwitch(std::string name);
 
-  // apply cut on a single var
+  //! apply cut on a single var
   bool passCut(std::string name, float var);
   // apply the same cut on n vars (ex. n electrons)
   bool passCut(std::string name, std::vector<float> vars);
 
-  // get cut map
+  //! get cut map
   std::map<std::string,std::pair<float,float> > getSelection() { return _cut; };
+  //! get switch map
+  std::map<std::string,int> getSwitches() { return _switch; } 
+
+  //! print the summary of the applied selection
   void summary();
+
+  //! append a selection to another one
+  void append(Selection* selectionToAdd);
 
 private:
   std::pair<float,float> readIntervalFromFile(std::string name);

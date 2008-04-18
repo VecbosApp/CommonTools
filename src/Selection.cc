@@ -128,3 +128,24 @@ void Selection::summary() {
 	      << std::endl; 
   }
 }
+
+void Selection::append(Selection* selectionToAdd) {
+
+  std::map<std::string,std::pair<float,float> > cutsToAdd = selectionToAdd->getSelection();
+  std::map<std::string,int> switchesToAdd = selectionToAdd->getSwitches();
+
+  if(cutsToAdd.size() > 0 ) {
+    std::map<std::string,std::pair<float,float> >::iterator iterCut;
+    std::map<std::string,int>::iterator iterSwitch=switchesToAdd.begin();
+    for( iterCut = cutsToAdd.begin(); iterCut != cutsToAdd.end(); iterCut++ ) {
+      _cut.insert( *iterCut );
+      _switch.insert( *iterSwitch );
+      ++iterSwitch;
+    }
+  }
+  else {
+    std::cout << "Selection::Warning!  Appending an empty selection to " 
+	      << _fileSwitch << " !" << std::endl;
+  }
+
+}
