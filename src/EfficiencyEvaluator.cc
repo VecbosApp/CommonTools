@@ -1,3 +1,4 @@
+#include <math.h>
 #include <vector>
 #include <iostream>
 #include <TH1F.h>
