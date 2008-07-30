@@ -6,8 +6,8 @@
 #include <TStyle.h>
 #include "CommonTools/include/EfficiencyEvaluator.hh"
 
-EfficiencyEvaluator::EfficiencyEvaluator(const char* namefile) {
-  _file = new TFile(namefile,"RECREATE");
+EfficiencyEvaluator::EfficiencyEvaluator(const char* namefile, const char* opt) {
+  _file = new TFile(namefile,opt);
   m_namefile = namefile;
   m_ymin = 0.0;
   m_ymax = 1.1;
@@ -17,7 +17,7 @@ EfficiencyEvaluator::~EfficiencyEvaluator() {
   delete _file;
 }
 
-void EfficiencyEvaluator::ComputeEfficiencies() {
+void EfficiencyEvaluator::ComputeEfficiencies(bool doAlsoPartialEfficiency) {
   
   // total efficiency
   std::vector<TH1F*>::const_iterator numItr;
@@ -29,24 +29,29 @@ void EfficiencyEvaluator::ComputeEfficiencies() {
       float effVal = eff->GetBinContent(i);
       float efferrVal = sqrt(effVal*(1-effVal)/(*numItr)->GetBinContent(i));
       eff->SetBinError(i,efferrVal);
+      // corret division by 0 for empty bins
+      float denomVal = _denominator->GetBinContent(i);
+      if ( denomVal==0 ) eff->SetBinContent(i,0);
     }
     _efficiencies.push_back(eff);
   }
   
   // partial efficiency
-  std::vector<TH1F*>::const_iterator numPreviousItr=_numerators.begin();
-  for(numItr=_numerators.begin(); numItr!=_numerators.end(); ++numItr) {
-    TH1F *effPartial = (TH1F*) (*numItr)->Clone((std::string((*numItr)->GetName())+"_EffWrtPrevious").c_str());
-    //    effPartial->SetName(name);
-    effPartial->Sumw2();
-    effPartial->Divide(*numItr, *numPreviousItr, 1, 1);
-    for(int i=1;i<=effPartial->GetNbinsX();++i) {
-      float effVal = effPartial->GetBinContent(i);
-      float efferrVal = sqrt(effVal*(1-effVal)/(*numItr)->GetBinContent(i));
-      effPartial->SetBinError(i,efferrVal);
+  if ( doAlsoPartialEfficiency ) {
+    std::vector<TH1F*>::const_iterator numPreviousItr=_numerators.begin();
+    for(numItr=_numerators.begin(); numItr!=_numerators.end(); ++numItr) {
+      TH1F *effPartial = (TH1F*) (*numItr)->Clone((std::string((*numItr)->GetName())+"_EffWrtPrevious").c_str());
+      //    effPartial->SetName(name);
+      effPartial->Sumw2();
+      effPartial->Divide(*numItr, *numPreviousItr, 1, 1);
+      for(int i=1;i<=effPartial->GetNbinsX();++i) {
+	float effVal = effPartial->GetBinContent(i);
+	float efferrVal = sqrt(effVal*(1-effVal)/(*numItr)->GetBinContent(i));
+	effPartial->SetBinError(i,efferrVal);
+      }
+      _efficiencies.push_back(effPartial);
+      if(numItr!=_numerators.begin()) ++numPreviousItr;
     }
-    _efficiencies.push_back(effPartial);
-    if(numItr!=_numerators.begin()) ++numPreviousItr;
   }
 
 }

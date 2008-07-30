@@ -19,14 +19,15 @@ private:
   float m_ymax;
 
 public:
-  EfficiencyEvaluator(const char* namefile);
+  EfficiencyEvaluator(const char* namefile, const char* opt="RECREATE");
   ~EfficiencyEvaluator();
   //! add a histogram as efficiency numerator
   void AddNumerator(TH1F *numerator) {_numerators.push_back(numerator);};
   //! set the denominator for the finalk efficiency (typically generator)
   void SetDenominator(TH1F *denominator) {_denominator=denominator;};
   //! compute eff wrt previous cut and absolute efficiency
-  void ComputeEfficiencies();
+  //! if doAlsoPartialEfficiency=true then compute also efficiency step by step
+  void ComputeEfficiencies(bool doAlsoPartialEfficiency=true);
   //! write the efficiency histograms in a ROOT file
   void Write();
   //! draw the cut / total efficiency histograms in a png file
