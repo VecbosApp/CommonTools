@@ -11,12 +11,16 @@ Skimmer::~Skimmer() {}
 
 void Skimmer::readFile() {
 
+  std::cout << ">>> Initializing the skim, this will take some time..." << endl;
+
   ifstream skimFile(m_file);
   while(!skimFile.eof()) {
     int bit = -1;
     skimFile >> bit;
     bits.push_back(bit);
   }
+
+  std::cout << "<<< Skim initialized. Now run. " << std::endl;
 
 }
 
