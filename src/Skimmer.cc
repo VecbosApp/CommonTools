@@ -12,12 +12,18 @@ Skimmer::~Skimmer() {}
 void Skimmer::readFile() {
 
   std::cout << ">>> Initializing the skim, this will take some time..." << endl;
-
+  
   ifstream skimFile(m_file);
-  while(!skimFile.eof()) {
-    int bit = -1;
-    skimFile >> bit;
-    bits.push_back(bit);
+  
+  if( skimFile.is_open() ) {
+    while(!skimFile.eof()) {
+      int bit = -1;
+      skimFile >> bit;
+      bits.push_back(bit);
+    }
+  } else {
+    std::cout << "!!! Serious ERROR: trying to initialise the skim without file." 
+	      << "ERROR in opening " << m_file << std::endl;
   }
 
   std::cout << "<<< Skim initialized. Now run. " << std::endl;
