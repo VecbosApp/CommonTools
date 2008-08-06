@@ -1,4 +1,5 @@
 #include "CommonTools/include/Utils.hh"
+#include <math.h>
 #include <iostream>
 
 bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[90]) {
@@ -22,5 +23,13 @@ bool Utils::getTriggersOR(std::vector<int> requiredTriggers, bool firedTrg[90]) 
   }
 
   return false;
+
+}
+
+bool Utils::isInElectronFiducialEta(float eta) {
+
+  return ( fabs(eta) < 1.4442 || // EB
+	   (fabs(eta) > 1.560 && fabs(eta) < 2.5 ) // EE
+	   );
 
 }
