@@ -29,6 +29,7 @@ class Counters {
   void Draw();
   void Draw(string name1,string name2);
   float GetVar(string name);
+  void Save(const char* filename, const char* option);
   
 };
 

@@ -2,6 +2,9 @@
 #include <iostream>
 #include <iomanip>
 #include <math.h>
+#include <TTree.h>
+#include <TFile.h>
+#include <TString.h>
 
 void Counters::AddVar(string name) {
   _names.push_back(name); 
@@ -70,4 +73,29 @@ void Counters::Draw(string name1,string name2) {
       }
     }
   }
+}
+
+void Counters::Save(const char* filename, const char* option) {
+  
+  TFile *file = TFile::Open(filename,option);
+  file->cd();
+
+  TString branchTitle(_title.c_str());
+  branchTitle.ReplaceAll(" ","_");
+  branchTitle.ReplaceAll("+","_");
+
+  TTree tree(branchTitle,"Efficiency Counters");
+
+  int ncuts = _counts.size();
+  float counts[ncuts];
+
+  tree.Branch("nCuts",&ncuts,"nCuts/I");
+  tree.Branch("nSel",counts,"nSel[nCuts]/F");
+
+  for(int i=0;i<ncuts;i++) counts[i]=_counts[i];
+
+  tree.Fill();
+  tree.Write();
+  file->Close();
+
 }
