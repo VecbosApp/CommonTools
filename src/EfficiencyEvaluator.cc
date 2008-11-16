@@ -154,3 +154,35 @@ void EfficiencyEvaluator::DrawAll() {
   DrawSequential();
 
 }
+
+
+std::vector<TH1F*> EfficiencyEvaluator::GetCumulativeEfficiencies() {
+
+  std::vector<TH1F*> output;
+
+  std::vector<TH1F*>::const_iterator effItr;
+  for(effItr=_efficiencies.begin(); effItr!=_efficiencies.end(); ++effItr) {
+    TH1F* histogram = *effItr;
+    TString name = histogram->GetName();
+    if ( !name.Contains("EffWrtPrevious") ) output.push_back(histogram);
+  }
+  
+  return output;
+
+}
+
+
+std::vector<TH1F*> EfficiencyEvaluator::GetSingleCutEfficiencies() {
+
+  std::vector<TH1F*> output;
+
+  std::vector<TH1F*>::const_iterator effItr;
+  for(effItr=_efficiencies.begin(); effItr!=_efficiencies.end(); ++effItr) {
+    TH1F* histogram = *effItr;
+    TString name = histogram->GetName();
+    if ( name.Contains("EffWrtPrevious") ) output.push_back(histogram);
+  }
+  
+  return output;
+
+}

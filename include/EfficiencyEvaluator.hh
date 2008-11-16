@@ -36,6 +36,10 @@ public:
   void DrawSingle();
   //! draw both single and sequential
   void DrawAll();
+  //! retrieve the vector of cumulative efficiencies
+  std::vector<TH1F*> GetCumulativeEfficiencies();
+  //! retrieve the vector of single cut efficiencies
+  std::vector<TH1F*> GetSingleCutEfficiencies();
   //! set the X axis title
   void SetXaxisTitle(const char *title) { m_xtitle = title; }
   //! set the Y axis title
