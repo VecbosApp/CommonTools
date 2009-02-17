@@ -22,7 +22,6 @@ public :
    Int_t           simulation_step;
    Int_t           digitisation_step;
    Int_t           L1simulation_step;
-   Int_t           validation_step;
    Int_t           digi2raw_step;
    Int_t           HLTriggerFirstPath;
    Int_t           HLT_L1Jet15;
@@ -184,7 +183,6 @@ public :
    TBranch        *b_simulation_step;   //!
    TBranch        *b_digitisation_step;   //!
    TBranch        *b_L1simulation_step;   //!
-   TBranch        *b_validation_step;   //!
    TBranch        *b_digi2raw_step;   //!
    TBranch        *b_HLTriggerFirstPath;   //!
    TBranch        *b_HLT_L1Jet15;   //!
@@ -417,7 +415,6 @@ void Conditions::Init(TTree *tree)
    fChain->SetBranchAddress("simulation_step", &simulation_step, &b_simulation_step);
    fChain->SetBranchAddress("digitisation_step", &digitisation_step, &b_digitisation_step);
    fChain->SetBranchAddress("L1simulation_step", &L1simulation_step, &b_L1simulation_step);
-   fChain->SetBranchAddress("validation_step", &validation_step, &b_validation_step);
    fChain->SetBranchAddress("digi2raw_step", &digi2raw_step, &b_digi2raw_step);
    fChain->SetBranchAddress("HLTriggerFirstPath", &HLTriggerFirstPath, &b_HLTriggerFirstPath);
    fChain->SetBranchAddress("HLT_L1Jet15", &HLT_L1Jet15, &b_HLT_L1Jet15);
