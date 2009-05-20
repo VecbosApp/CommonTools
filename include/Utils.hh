@@ -2,6 +2,7 @@
 #define UTILS_H
 
 #include <vector>
+#include "CommonTools/include/LeptonIdBits.h"
 
 class Utils {
 
@@ -16,6 +17,8 @@ public:
   //! returns true if eta belongs to the electron fiducial region:
   //! remove the gap between EB - EE plus some crystal in the bounds
   bool isInElectronFiducialEta(float eta);
+  //! get value of the bit corresponding to certain muon ID 
+  bool muonIdVal(int word, MuonIdBit bit);
 
 protected:
 

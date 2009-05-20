@@ -33,3 +33,9 @@ bool Utils::isInElectronFiducialEta(float eta) {
 	   );
 
 }
+
+bool Utils::muonIdVal(int word, MuonIdBit bit) {
+
+  return (word >> bit)%2;
+
+}
