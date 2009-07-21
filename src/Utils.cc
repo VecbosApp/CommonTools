@@ -2,7 +2,7 @@
 #include <math.h>
 #include <iostream>
 
-bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[90]) {
+bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[159]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
 
@@ -14,7 +14,7 @@ bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[90])
 
 }
 
-bool Utils::getTriggersOR(std::vector<int> requiredTriggers, bool firedTrg[90]) {
+bool Utils::getTriggersOR(std::vector<int> requiredTriggers, bool firedTrg[159]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
   
