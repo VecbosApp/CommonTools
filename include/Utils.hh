@@ -15,10 +15,20 @@ public:
   //! returns the OR of the requested triggers
   bool getTriggersOR(std::vector<int> requiredTriggers, bool firedTrg[159]);
   //! returns true if eta belongs to the electron fiducial region:
-  //! remove the gap between EB - EE plus some crystal in the bounds
+  //! remove the gap between EB - EE plus some crystal in the bounds (simple, not precise)
   bool isInElectronFiducialEta(float eta);
+  //! remove all the ECAL gaps (from electron flags: precise)
+  bool isInECALFiducial(int word);
+  //! get value of the bit corresponding to ECAL fiducial flags 
+  bool fiducialFlagECAL(int word, bits::ElectronFiducialBit bit);
   //! get value of the bit corresponding to certain muon ID 
-  bool muonIdVal(int word, MuonIdBit bit);
+  bool muonIdVal(int word, bits::MuonIdBit bit);
+  //! get value of the bit corresponding to certain electron ID
+  bool electronIdVal(int word, bits::ElectronIdBit bit);
+  //! get value of the bit corresponding to electron reconstruction type
+  bool electronRecoType(int word, bits::ElectronRecoBit bit);
+  //! get value of the bit corresponding to energy correction type
+  bool electronEnergyCorrectionType(int word, bits::ElectronEnergyCorrectionBit bit);
 
 protected:
 
