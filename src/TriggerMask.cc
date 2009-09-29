@@ -1,6 +1,8 @@
 #include "CommonTools/include/TriggerMask.hh"
 #include <iostream>
 
+using namespace std;
+
 TriggerMask::TriggerMask(TTree *tree)
   : Conditions(tree) {
 
@@ -12,155 +14,17 @@ void TriggerMask::requireTrigger( const char* triggerString ) {
   
   m_tree->GetEntry(0);
 
-  if( strcmp (triggerString,"HLT_L1Jet15") == 0 ) m_requiredTriggers.push_back( HLT_L1Jet15 );
-  if( strcmp (triggerString,"HLT_Jet30") == 0 ) m_requiredTriggers.push_back( HLT_Jet30 );
-  if( strcmp (triggerString,"HLT_Jet50") == 0 ) m_requiredTriggers.push_back( HLT_Jet50 );
-  if( strcmp (triggerString,"HLT_Jet80") == 0 ) m_requiredTriggers.push_back( HLT_Jet80 );
-  if( strcmp (triggerString,"HLT_Jet110") == 0 ) m_requiredTriggers.push_back( HLT_Jet110 );
-  if( strcmp (triggerString,"HLT_Jet180") == 0 ) m_requiredTriggers.push_back( HLT_Jet180 );
-  if( strcmp (triggerString,"HLT_Jet250") == 0 ) m_requiredTriggers.push_back( HLT_Jet250 );
-  if( strcmp (triggerString,"HLT_FwdJet20") == 0 ) m_requiredTriggers.push_back( HLT_FwdJet20 );
-  if( strcmp (triggerString,"HLT_DoubleJet150") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet150 );
-  if( strcmp (triggerString,"HLT_DoubleJet125_Aco") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet125_Aco );
-  if( strcmp (triggerString,"HLT_DoubleFwdJet50") == 0 ) m_requiredTriggers.push_back( HLT_DoubleFwdJet50 );
-  if( strcmp (triggerString,"HLT_DiJetAve15") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve15 );
-  if( strcmp (triggerString,"HLT_DiJetAve30") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve30 );
-  if( strcmp (triggerString,"HLT_DiJetAve50") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve50 );
-  if( strcmp (triggerString,"HLT_DiJetAve70") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve70 );
-  if( strcmp (triggerString,"HLT_DiJetAve130") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve130 );
-  if( strcmp (triggerString,"HLT_DiJetAve220") == 0 ) m_requiredTriggers.push_back( HLT_DiJetAve220 );
-  if( strcmp (triggerString,"HLT_TripleJet85") == 0 ) m_requiredTriggers.push_back( HLT_TripleJet85 );
-  if( strcmp (triggerString,"HLT_QuadJet30") == 0 ) m_requiredTriggers.push_back( HLT_QuadJet30 );
-  if( strcmp (triggerString,"HLT_QuadJet60") == 0 ) m_requiredTriggers.push_back( HLT_QuadJet60 );
-  if( strcmp (triggerString,"HLT_SumET120") == 0 ) m_requiredTriggers.push_back( HLT_SumET120 );
-  if( strcmp (triggerString,"HLT_L1MET20") == 0 ) m_requiredTriggers.push_back( HLT_L1MET20 );
-  if( strcmp (triggerString,"HLT_MET25") == 0 ) m_requiredTriggers.push_back( HLT_MET25 );
-  if( strcmp (triggerString,"HLT_MET35") == 0 ) m_requiredTriggers.push_back( HLT_MET35 );
-  if( strcmp (triggerString,"HLT_MET50") == 0 ) m_requiredTriggers.push_back( HLT_MET50 );
-  if( strcmp (triggerString,"HLT_MET65") == 0 ) m_requiredTriggers.push_back( HLT_MET65 );
-  if( strcmp (triggerString,"HLT_MET75") == 0 ) m_requiredTriggers.push_back( HLT_MET75 );
-  if( strcmp (triggerString,"HLT_MET35_HT350") == 0 ) m_requiredTriggers.push_back( HLT_MET35_HT350 );
-  if( strcmp (triggerString,"HLT_Jet180_MET60") == 0 ) m_requiredTriggers.push_back( HLT_Jet180_MET60 );
-  if( strcmp (triggerString,"HLT_Jet60_MET70_Aco") == 0 ) m_requiredTriggers.push_back( HLT_Jet60_MET70_Aco );
-  if( strcmp (triggerString,"HLT_Jet100_MET60_Aco") == 0 ) m_requiredTriggers.push_back( HLT_Jet100_MET60_Aco );
-  if( strcmp (triggerString,"HLT_DoubleJet125_MET60") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet125_MET60 );
-  if( strcmp (triggerString,"HLT_DoubleFwdJet40_MET60") == 0 ) m_requiredTriggers.push_back( HLT_DoubleFwdJet40_MET60 );
-  if( strcmp (triggerString,"HLT_DoubleJet60_MET60_Aco") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet60_MET60_Aco );
-  if( strcmp (triggerString,"HLT_DoubleJet50_MET70_Aco") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet50_MET70_Aco );
-  if( strcmp (triggerString,"HLT_DoubleJet40_MET70_Aco") == 0 ) m_requiredTriggers.push_back( HLT_DoubleJet40_MET70_Aco );
-  if( strcmp (triggerString,"HLT_TripleJet60_MET60") == 0 ) m_requiredTriggers.push_back( HLT_TripleJet60_MET60 );
-  if( strcmp (triggerString,"HLT_QuadJet35_MET60") == 0 ) m_requiredTriggers.push_back( HLT_QuadJet35_MET60 );
-  if( strcmp (triggerString,"HLT_IsoEle15_L1I") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle15_L1I );
-  if( strcmp (triggerString,"HLT_IsoEle18_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle18_L1R );
-  if( strcmp (triggerString,"HLT_IsoEle15_LW_L1I") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle15_LW_L1I );
-  if( strcmp (triggerString,"HLT_LooseIsoEle15_LW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_LooseIsoEle15_LW_L1R );
-  if( strcmp (triggerString,"HLT_Ele10_SW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_Ele10_SW_L1R );
-  if( strcmp (triggerString,"HLT_Ele15_SW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_Ele15_SW_L1R );
-  if( strcmp (triggerString,"HLT_Ele15_LW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_Ele15_LW_L1R );
-  if( strcmp (triggerString,"HLT_EM80") == 0 ) m_requiredTriggers.push_back( HLT_EM80 );
-  if( strcmp (triggerString,"HLT_EM200") == 0 ) m_requiredTriggers.push_back( HLT_EM200 );
-  if( strcmp (triggerString,"HLT_DoubleIsoEle10_L1I") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoEle10_L1I );
-  if( strcmp (triggerString,"HLT_DoubleIsoEle12_L1R") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoEle12_L1R );
-  if( strcmp (triggerString,"HLT_DoubleIsoEle10_LW_L1I") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoEle10_LW_L1I );
-  if( strcmp (triggerString,"HLT_DoubleIsoEle12_LW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoEle12_LW_L1R );
-  if( strcmp (triggerString,"HLT_DoubleEle5_SW_L1R") == 0 ) m_requiredTriggers.push_back( HLT_DoubleEle5_SW_L1R );
-  if( strcmp (triggerString,"HLT_DoubleEle10_LW_OnlyPixelM_L1R") == 0 ) m_requiredTriggers.push_back( HLT_DoubleEle10_LW_OnlyPixelM_L1R );
-  if( strcmp (triggerString,"HLT_DoubleEle10_Z") == 0 ) m_requiredTriggers.push_back( HLT_DoubleEle10_Z );
-  if( strcmp (triggerString,"HLT_DoubleEle6_Exclusive") == 0 ) m_requiredTriggers.push_back( HLT_DoubleEle6_Exclusive );
-  if( strcmp (triggerString,"HLT_IsoPhoton30_L1I") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton30_L1I );
-  if( strcmp (triggerString,"HLT_IsoPhoton10_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton10_L1R );
-  if( strcmp (triggerString,"HLT_IsoPhoton15_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton15_L1R );
-  if( strcmp (triggerString,"HLT_IsoPhoton20_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton20_L1R );
-  if( strcmp (triggerString,"HLT_IsoPhoton25_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton25_L1R );
-  if( strcmp (triggerString,"HLT_IsoPhoton40_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoPhoton40_L1R );
-  if( strcmp (triggerString,"HLT_Photon15_L1R") == 0 ) m_requiredTriggers.push_back( HLT_Photon15_L1R );
-  if( strcmp (triggerString,"HLT_Photon25_L1R") == 0 ) m_requiredTriggers.push_back( HLT_Photon25_L1R );
-  if( strcmp (triggerString,"HLT_DoubleIsoPhoton20_L1I") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoPhoton20_L1I );
-  if( strcmp (triggerString,"HLT_DoubleIsoPhoton20_L1R") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoPhoton20_L1R );
-  if( strcmp (triggerString,"HLT_DoublePhoton10_Exclusive") == 0 ) m_requiredTriggers.push_back( HLT_DoublePhoton10_Exclusive );
-  if( strcmp (triggerString,"HLT_L1Mu") == 0 ) m_requiredTriggers.push_back( HLT_L1Mu );
-  if( strcmp (triggerString,"HLT_L1MuOpen") == 0 ) m_requiredTriggers.push_back( HLT_L1MuOpen );
-  if( strcmp (triggerString,"HLT_L2Mu9") == 0 ) m_requiredTriggers.push_back( HLT_L2Mu9 );
-  if( strcmp (triggerString,"HLT_IsoMu9") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu9 );
-  if( strcmp (triggerString,"HLT_IsoMu11") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu11 );
-  if( strcmp (triggerString,"HLT_IsoMu13") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu13 );
-  if( strcmp (triggerString,"HLT_IsoMu15") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu15 );
-  if( strcmp (triggerString,"HLT_Mu3") == 0 ) m_requiredTriggers.push_back( HLT_Mu3 );
-  if( strcmp (triggerString,"HLT_Mu5") == 0 ) m_requiredTriggers.push_back( HLT_Mu5 );
-  if( strcmp (triggerString,"HLT_Mu7") == 0 ) m_requiredTriggers.push_back( HLT_Mu7 );
-  if( strcmp (triggerString,"HLT_Mu9") == 0 ) m_requiredTriggers.push_back( HLT_Mu9 );
-  if( strcmp (triggerString,"HLT_Mu11") == 0 ) m_requiredTriggers.push_back( HLT_Mu11 );
-  if( strcmp (triggerString,"HLT_Mu13") == 0 ) m_requiredTriggers.push_back( HLT_Mu13 );
-  if( strcmp (triggerString,"HLT_Mu15") == 0 ) m_requiredTriggers.push_back( HLT_Mu15 );
-  if( strcmp (triggerString,"HLT_Mu15_L1Mu7") == 0 ) m_requiredTriggers.push_back( HLT_Mu15_L1Mu7 );
-  if( strcmp (triggerString,"HLT_Mu15_Vtx2cm") == 0 ) m_requiredTriggers.push_back( HLT_Mu15_Vtx2cm );
-  if( strcmp (triggerString,"HLT_Mu15_Vtx2mm") == 0 ) m_requiredTriggers.push_back( HLT_Mu15_Vtx2mm );
-  if( strcmp (triggerString,"HLT_DoubleIsoMu3") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoMu3 );
-  if( strcmp (triggerString,"HLT_DoubleMu3") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3 );
-  if( strcmp (triggerString,"HLT_DoubleMu3_Vtx2cm") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_Vtx2cm );
-  if( strcmp (triggerString,"HLT_DoubleMu3_Vtx2mm") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_Vtx2mm );
-  if( strcmp (triggerString,"HLT_DoubleMu3_JPsi") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_JPsi );
-  if( strcmp (triggerString,"HLT_DoubleMu3_Upsilon") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_Upsilon );
-  if( strcmp (triggerString,"HLT_DoubleMu7_Z") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu7_Z );
-  if( strcmp (triggerString,"HLT_DoubleMu3_SameSign") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_SameSign );
-  if( strcmp (triggerString,"HLT_DoubleMu3_Psi2S") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_Psi2S );
-  if( strcmp (triggerString,"HLT_BTagIP_Jet180") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_Jet180 );
-  if( strcmp (triggerString,"HLT_BTagIP_Jet120_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_Jet120_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagIP_DoubleJet120") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_DoubleJet120 );
-  if( strcmp (triggerString,"HLT_BTagIP_DoubleJet60_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_DoubleJet60_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagIP_TripleJet70") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_TripleJet70 );
-  if( strcmp (triggerString,"HLT_BTagIP_TripleJet40_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_TripleJet40_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagIP_QuadJet40") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_QuadJet40 );
-  if( strcmp (triggerString,"HLT_BTagIP_QuadJet30_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_QuadJet30_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagIP_HT470") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_HT470 );
-  if( strcmp (triggerString,"HLT_BTagIP_HT320_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagIP_HT320_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagMu_DoubleJet120") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_DoubleJet120 );
-  if( strcmp (triggerString,"HLT_BTagMu_DoubleJet60_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_DoubleJet60_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagMu_TripleJet70") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_TripleJet70 );
-  if( strcmp (triggerString,"HLT_BTagMu_TripleJet40_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_TripleJet40_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagMu_QuadJet40") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_QuadJet40 );
-  if( strcmp (triggerString,"HLT_BTagMu_QuadJet30_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_QuadJet30_Relaxed );
-  if( strcmp (triggerString,"HLT_BTagMu_HT370") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_HT370 );
-  if( strcmp (triggerString,"HLT_BTagMu_HT250_Relaxed") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_HT250_Relaxed );
-  if( strcmp (triggerString,"HLT_DoubleMu3_BJPsi") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu3_BJPsi );
-  if( strcmp (triggerString,"HLT_DoubleMu4_BJPsi") == 0 ) m_requiredTriggers.push_back( HLT_DoubleMu4_BJPsi );
-  if( strcmp (triggerString,"HLT_TripleMu3_TauTo3Mu") == 0 ) m_requiredTriggers.push_back( HLT_TripleMu3_TauTo3Mu );
-  if( strcmp (triggerString,"HLT_IsoTau_MET65_Trk20") == 0 ) m_requiredTriggers.push_back( HLT_IsoTau_MET65_Trk20 );
-  if( strcmp (triggerString,"HLT_IsoTau_MET35_Trk15_L1MET") == 0 ) m_requiredTriggers.push_back( HLT_LooseIsoTau_MET30 );
-  if( strcmp (triggerString,"HLT_LooseIsoTau_MET30") == 0 ) m_requiredTriggers.push_back( HLT_LooseIsoTau_MET30 );
-  if( strcmp (triggerString,"HLT_LooseIsoTau_MET30_L1MET") == 0 ) m_requiredTriggers.push_back( HLT_LooseIsoTau_MET30_L1MET );
-  if( strcmp (triggerString,"HLT_DoubleIsoTau_Trk3") == 0 ) m_requiredTriggers.push_back( HLT_DoubleIsoTau_Trk3 );
-  if( strcmp (triggerString,"HLT_DoubleLooseIsoTau") == 0 ) m_requiredTriggers.push_back( HLT_DoubleLooseIsoTau );
-  if( strcmp (triggerString,"HLT_IsoEle8_IsoMu7") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle8_IsoMu7 );
-  if( strcmp (triggerString,"HLT_IsoEle10_Mu10_L1R") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle10_Mu10_L1R );
-  if( strcmp (triggerString,"HLT_IsoEle12_IsoTau_Trk3") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle12_IsoTau_Trk3 );
-  if( strcmp (triggerString,"HLT_IsoEle10_BTagIP_Jet35") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle10_BTagIP_Jet35 );
-  if( strcmp (triggerString,"HLT_IsoEle12_Jet40") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle12_Jet40 );
-  if( strcmp (triggerString,"HLT_IsoEle12_DoubleJet80") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle12_DoubleJet80 );
-  if( strcmp (triggerString,"HLT_IsoEle5_TripleJet30") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle5_TripleJet30 );
-  if( strcmp (triggerString,"HLT_IsoEle12_TripleJet60") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle12_TripleJet60 );
-  if( strcmp (triggerString,"HLT_IsoEle12_QuadJet35") == 0 ) m_requiredTriggers.push_back( HLT_IsoEle12_QuadJet35 );
-  if( strcmp (triggerString,"HLT_IsoMu14_IsoTau_Trk3") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu14_IsoTau_Trk3 );
-  if( strcmp (triggerString,"HLT_IsoMu7_BTagIP_Jet35") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu7_BTagIP_Jet35 );
-  if( strcmp (triggerString,"HLT_IsoMu7_BTagMu_Jet20") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu7_BTagMu_Jet20 );
-  if( strcmp (triggerString,"HLT_IsoMu7_Jet40") == 0 ) m_requiredTriggers.push_back( HLT_IsoMu7_Jet40 );
-  if( strcmp (triggerString,"HLT_NoL2IsoMu8_Jet40") == 0 ) m_requiredTriggers.push_back( HLT_NoL2IsoMu8_Jet40 );
-  if( strcmp (triggerString,"HLT_Mu14_Jet50") == 0 ) m_requiredTriggers.push_back( HLT_Mu14_Jet50 );
-  if( strcmp (triggerString,"HLT_Mu5_TripleJet30") == 0 ) m_requiredTriggers.push_back( HLT_Mu5_TripleJet30 );
-  if( strcmp (triggerString,"HLT_BTagMu_Jet20_Calib") == 0 ) m_requiredTriggers.push_back( HLT_BTagMu_Jet20_Calib );
-  if( strcmp (triggerString,"HLT_ZeroBias") == 0 ) m_requiredTriggers.push_back( HLT_ZeroBias );
-  if( strcmp (triggerString,"HLT_MinBias") == 0 ) m_requiredTriggers.push_back( HLT_MinBias );
-  if( strcmp (triggerString,"HLT_MinBiasHcal") == 0 ) m_requiredTriggers.push_back( HLT_MinBiasHcal );
-  if( strcmp (triggerString,"HLT_MinBiasEcal") == 0 ) m_requiredTriggers.push_back( HLT_MinBiasEcal );
-  if( strcmp (triggerString,"HLT_MinBiasPixel") == 0 ) m_requiredTriggers.push_back( HLT_MinBiasPixel );
-  if( strcmp (triggerString,"HLT_MinBiasPixel_Trk5") == 0 ) m_requiredTriggers.push_back( HLT_MinBiasPixel_Trk5 );
-  if( strcmp (triggerString,"HLT_BackwardBSC") == 0 ) m_requiredTriggers.push_back( HLT_BackwardBSC );
-  if( strcmp (triggerString,"HLT_ForwardBSC") == 0 ) m_requiredTriggers.push_back( HLT_ForwardBSC );
-  if( strcmp (triggerString,"HLT_CSCBeamHalo") == 0 ) m_requiredTriggers.push_back( HLT_CSCBeamHalo );
-  if( strcmp (triggerString,"HLT_CSCBeamHaloOverlapRing1") == 0 ) m_requiredTriggers.push_back( HLT_CSCBeamHaloOverlapRing1 );
-  if( strcmp (triggerString,"HLT_CSCBeamHaloOverlapRing2") == 0 ) m_requiredTriggers.push_back( HLT_CSCBeamHaloOverlapRing2 );
-  if( strcmp (triggerString,"HLT_CSCBeamHaloRing2or3") == 0 ) m_requiredTriggers.push_back( HLT_CSCBeamHaloRing2or3 );
-  if( strcmp (triggerString,"HLT_TrackerCosmics") == 0 ) m_requiredTriggers.push_back( HLT_TrackerCosmics );
+  bool found = false;
+  for(unsigned int i=0; i<nameHLT->size(); i++) {
+
+    if( !strcmp (triggerString, nameHLT->at(i).c_str() ) ) {
+      m_requiredTriggers.push_back( indexHLT->at(i) ) ;
+      found = true;
+    }
+
+  }
+
+  if ( !found ) cout << "ERROR! Trigger Path = " << triggerString << " not found in the saved paths" << endl;
   
 }
 

@@ -2,6 +2,8 @@
 #include <math.h>
 #include <iostream>
 
+using namespace bits;
+
 bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[159]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
@@ -34,8 +36,32 @@ bool Utils::isInElectronFiducialEta(float eta) {
 
 }
 
+bool Utils::isInECALFiducial(int word) {
+
+  return ( ( (word >> isEE)%2 || (word >> isEB)%2 ) && !((word >> isGap)%2) );
+
+}
+
 bool Utils::muonIdVal(int word, MuonIdBit bit) {
 
   return (word >> bit)%2;
 
+}
+
+bool Utils::electronIdVal(int word, ElectronIdBit bit) {
+
+  return (word >> bit)%2;
+
+}
+
+bool Utils::electronRecoType(int word, ElectronRecoBit bit) {
+
+  return (word >> bit)%2;
+
+}
+
+bool Utils::electronEnergyCorrectionType(int word, ElectronEnergyCorrectionBit bit) {
+
+  return (word >> bit)%2;
+  
 }
