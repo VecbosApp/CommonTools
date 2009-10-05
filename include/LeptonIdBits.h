@@ -19,6 +19,8 @@ enum ElectronRecoBit { isTrackerDriven=0, isEcalDriven=1 };
 
 enum ElectronEnergyCorrectionBit { isMomentumCorrected=0, isEcalEnergyCorrected=1 };
 
+enum ElectronClassification { UNKNOWNCLASS =-1, GOLDEN, BIGBREM, NARROW, SHOWERING, GAP } ;
+
 }
 
 #endif
