@@ -42,6 +42,12 @@ bool Utils::isInECALFiducial(int word) {
 
 }
 
+bool Utils::fiducialFlagECAL(int word, ElectronFiducialBit bit) {
+
+  return ( word >> bit )%2;
+
+}
+
 bool Utils::muonIdVal(int word, MuonIdBit bit) {
 
   return (word >> bit)%2;
