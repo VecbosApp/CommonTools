@@ -27,7 +27,7 @@ void EfficiencyEvaluator::ComputeEfficiencies(bool doAlsoPartialEfficiency) {
     eff->Divide(*numItr, _denominator, 1, 1);
     for(int i=1;i<=eff->GetNbinsX();++i) {
       float effVal = eff->GetBinContent(i);
-      float efferrVal = sqrt(effVal*(1-effVal)/(*numItr)->GetBinContent(i));
+      float efferrVal = sqrt(effVal*(1-effVal)/_denominator->GetBinContent(i));
       eff->SetBinError(i,efferrVal);
       // corret division by 0 for empty bins
       float denomVal = _denominator->GetBinContent(i);
@@ -46,7 +46,7 @@ void EfficiencyEvaluator::ComputeEfficiencies(bool doAlsoPartialEfficiency) {
       effPartial->Divide(*numItr, *numPreviousItr, 1, 1);
       for(int i=1;i<=effPartial->GetNbinsX();++i) {
 	float effVal = effPartial->GetBinContent(i);
-	float efferrVal = sqrt(effVal*(1-effVal)/(*numItr)->GetBinContent(i));
+	float efferrVal = sqrt(effVal*(1-effVal)/(*numPreviousItr)->GetBinContent(i));
 	effPartial->SetBinError(i,efferrVal);
       }
       _efficiencies.push_back(effPartial);
