@@ -32,6 +32,10 @@ public:
   // apply the same cut on n vars (ex. n electrons)
   bool passCut(std::string name, std::vector<float> vars);
 
+  //! get upper/lower cut value
+  float getUpperCut(std::string name);
+  float getLowerCut(std::string name);
+
   //! get cut map
   std::map<std::string,std::pair<float,float> > getSelection() { return _cut; };
   //! get switch map

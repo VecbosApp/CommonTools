@@ -106,6 +106,16 @@ bool Selection::passCut(std::string name, std::vector<float> vars) {
   return true;
 }
 
+float Selection::getUpperCut(std::string name) {
+  std::pair<float,float> range = _cut[name];
+  return range.second;
+}
+
+float Selection::getLowerCut(std::string name) {
+  std::pair<float,float> range = _cut[name];
+  return range.first;
+}
+
 void Selection::summary() {
   std::map<std::string,std::pair<float,float> >::iterator iter;
   for( iter = _cut.begin(); iter!=_cut.end(); iter++) {
