@@ -1,5 +1,5 @@
-#include <fstream.h>
-#include <iostream.h>
+#include <fstream>
+#include <iostream>
 
 #include "CommonTools/include/Skimmer.hh"
 
@@ -11,9 +11,9 @@ Skimmer::~Skimmer() {}
 
 void Skimmer::readFile() {
 
-  std::cout << ">>> Initializing the skim, this will take some time..." << endl;
+  std::cout << ">>> Initializing the skim, this will take some time..." << std::endl;
   
-  ifstream skimFile(m_file);
+  std::ifstream skimFile(m_file);
   
   if( skimFile.is_open() ) {
     while(!skimFile.eof()) {
@@ -33,7 +33,7 @@ void Skimmer::readFile() {
 bool Skimmer::output(int event) {
 
   if( bits.size() == 0 ) {
-    cout << "SKIMMER: probably you have not initialised correctly the skim from file..." << std::endl; 
+    std::cout << "SKIMMER: probably you have not initialised correctly the skim from file..." << std::endl; 
   }
 
   if( event > bits.size() ) {
