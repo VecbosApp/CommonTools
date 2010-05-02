@@ -4,24 +4,36 @@
 
 using namespace bits;
 
-bool Utils::getTriggersAND(std::vector<int> requiredTriggers, bool firedTrg[159]) {
+bool Utils::getTriggersAND(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
 
+  // unpack the trigger words
   for( int i=0; i<requiredTriggers.size(); i++ ) {
-    if ( !firedTrg[ requiredTriggers[i] ] ) return false;
+    
+    int block =  requiredTriggers[i]/30;
+    int pos = requiredTriggers[i]%30;
+    int word = firedTrg[block];
+
+    if ( !( (word >> pos)%2) ) return false;
   }
 
   return true;
 
 }
 
-bool Utils::getTriggersOR(std::vector<int> requiredTriggers, bool firedTrg[159]) {
+bool Utils::getTriggersOR(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
   
+  // unpack the trigger words
   for( int i=0; i<requiredTriggers.size(); i++ ) {
-    if ( firedTrg[ requiredTriggers[i] ] ) return true;
+
+    int block =  requiredTriggers[i]/30;
+    int pos = requiredTriggers[i]%30;
+    int word = firedTrg[block];
+    
+    if ( (word >> pos)%2 ) return true;
   }
 
   return false;
