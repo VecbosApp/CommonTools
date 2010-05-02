@@ -40,6 +40,46 @@ bool Utils::getTriggersOR(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
 }
 
+bool Utils:: getL1TriggersOutput(std::vector<int> requiredTriggers, std::vector<int> notRequiredTriggers, int L1FiredTrg[5]) {
+
+  if ( requiredTriggers.size() == 0 && notRequiredTriggers.size() == 0) return true;
+  
+  bool passRequiredTrigger = false;
+  // unpack the trigger words
+  for( int i=0; i<requiredTriggers.size(); i++ ) {
+
+    int block =  requiredTriggers[i]/30;
+    int pos = requiredTriggers[i]%30;
+    int word = L1FiredTrg[block];
+    
+    if ( (word >> pos)%2 ) {
+      passRequiredTrigger = true;
+      break;
+    }
+  }
+
+  if(requiredTriggers.size() > 0 && !passRequiredTrigger) return false;
+
+  bool passNotRequiredTrigger = false;
+  // unpack the trigger words
+  for( int i=0; i<notRequiredTriggers.size(); i++ ) {
+
+    int block =  notRequiredTriggers[i]/30;
+    int pos = notRequiredTriggers[i]%30;
+    int word = L1FiredTrg[block];
+    
+    if ( (word >> pos)%2 ) {
+      passNotRequiredTrigger = true;
+      break;
+    }
+  }
+  
+  if(notRequiredTriggers.size() > 0 && passNotRequiredTrigger) return false;
+
+  return true;
+  
+}
+
 bool Utils::isInElectronFiducialEta(float eta) {
 
   return ( fabs(eta) < 1.4442 || // EB
