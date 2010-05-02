@@ -1,27 +1,34 @@
+//////////////////////////////////////////////////////////
+// This class has been automatically generated on
+// Sun May  2 11:08:26 2010 by ROOT version 5.22/00d
+// from TTree Conditions/Conditions
+// found on file: /cmsrm/pc21_2/emanuele/data/VecBos3.5.X/default_MC_Wenu.root
+//////////////////////////////////////////////////////////
+
 #ifndef Conditions_h
 #define Conditions_h
-
-#include <vector>
-#include <string>
 
 #include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
 
+#include <vector>
+#include <string>
+
 class Conditions {
 public :
-  TTree          *fChain;   //!pointer to the analyzed TTree or TChain
-  Int_t           fCurrent; //!current Tree number in a TChain
-  
-  // Declaration of leaf types
-  Int_t           nHLT;
-  std::vector<int> *indexHLT;
-  std::vector<std::string> *nameHLT;
-  
-  // List of branches
-  TBranch *b_nHLT;
-  TBranch *b_indexHLT;
-  TBranch *b_nameHLT;  
+   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   Int_t           fCurrent; //!current Tree number in a TChain
+
+   // Declaration of leaf types
+   Int_t           nHLT;
+  std::vector<std::string>  *nameHLT;
+  std::vector<unsigned int> *indexHLT;
+
+   // List of branches
+   TBranch        *b_nHLT;   //!
+   TBranch        *b_nameHLT;   //!
+   TBranch        *b_indexHLT;   //!
 
    Conditions(TTree *tree=0);
    virtual ~Conditions();
@@ -42,9 +49,9 @@ Conditions::Conditions(TTree *tree)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("default.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/cmsrm/pc21_2/emanuele/data/VecBos3.5.X/default_MC_Wenu.root");
       if (!f) {
-         f = new TFile("default.root");
+         f = new TFile("/cmsrm/pc21_2/emanuele/data/VecBos3.5.X/default_MC_Wenu.root");
       }
       tree = (TTree*)gDirectory->Get("Conditions");
 
@@ -89,6 +96,9 @@ void Conditions::Init(TTree *tree)
    // Init() will be called many times when running on PROOF
    // (once per file to be processed).
 
+   // Set object pointer
+   nameHLT = 0;
+   indexHLT = 0;
    // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
@@ -96,9 +106,8 @@ void Conditions::Init(TTree *tree)
    fChain->SetMakeClass(1);
 
    fChain->SetBranchAddress("nHLT", &nHLT, &b_nHLT);
-   fChain->SetBranchAddress("indexHLT", &indexHLT, &b_indexHLT);
    fChain->SetBranchAddress("nameHLT", &nameHLT, &b_nameHLT);
-
+   fChain->SetBranchAddress("indexHLT", &indexHLT, &b_indexHLT);
    Notify();
 }
 
