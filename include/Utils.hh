@@ -25,8 +25,10 @@ public:
   bool fiducialFlagECAL(int word, bits::ElectronFiducialBit bit);
   //! get value of the bit corresponding to certain muon ID 
   bool muonIdVal(int word, bits::MuonIdBit bit);
-  //! get value of the bit corresponding to certain electron ID
+  //! get value of the eleID bit corresponding to certain electron ID
   bool electronIdVal(int word, bits::ElectronIdBit bit);
+  //! get value of the isolation bit corresponding to certain electron ID
+  bool isolVal(int word, bits::ElectronIdBit bit);
   //! get value of the bit corresponding to electron reconstruction type
   bool electronRecoType(int word, bits::ElectronRecoBit bit);
   //! get value of the bit corresponding to energy correction type

@@ -106,10 +106,18 @@ bool Utils::muonIdVal(int word, MuonIdBit bit) {
 
 }
 
-bool Utils::electronIdVal(int word, ElectronIdBit bit) {
+bool Utils::electronIdVal(int word, ElectronIdBit bit  ) {
+  // for each electron ID type, 3 bits are stored:
+  // i            j        k
+  // notused      iso      ID
+  return ( ((word >> 3*bit) & 0b001) >> 0 )%2;
+}
 
-  return (word >> bit)%2;
-
+bool Utils::isolVal(int word, ElectronIdBit bit  ) {
+  // for each electron ID type, 3 bits are stored:
+  // i            j        k
+  // notused      iso      ID
+  return ( ((word >> 3*bit) & 0b010) >> 1 )%2;
 }
 
 bool Utils::electronRecoType(int word, ElectronRecoBit bit) {
