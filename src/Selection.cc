@@ -69,6 +69,36 @@ int Selection::readSwitchFromFile(std::string name) {
   return Switch;
 }
 
+std::string Selection::readStringFromFile(std::string name) {
+
+  std::string StringPar;
+  std::ifstream setfile(_fileSwitch.c_str());
+  if(!setfile.good()) {
+    std::cout << "Selection::Error!   Unable to open the file " << _fileSwitch << std::endl;
+    return 0;
+  }
+  else {
+    std::string var; 
+    bool found=false;
+    while (1) {
+      setfile >> var >> StringPar;
+      if(!setfile.good()) break;
+      if(var==name) { 
+	found=true;
+	break;
+      }
+    }
+    if(!found) {
+      std::cout<< "Selection::Warning! cannot read settings for string parameter " 
+	       << name << " in file " << _fileSwitch
+	       << "switching it to empty string" << std::endl;
+      return std::string("");
+    }
+  }
+  setfile.close();
+  return StringPar;
+}
+
 
 void Selection::addCut(std::string name) {
   std::pair<float,float> range = readIntervalFromFile(name);
@@ -84,12 +114,21 @@ void Selection::addSwitch(std::string name) {
   _switch.insert( make_pair( name, Switch) );
 }
 
+void Selection::addStringParameter(std::string name) {
+  std::string StringPar = readStringFromFile(name);
+  _stringPar.insert( make_pair( name, StringPar) );
+}
+
 std::pair<float,float> Selection::getCut(std::string name) {
   return _cut[name];
 } 
 
 int Selection::getSwitch(std::string name) {
   return _switch[name];
+}
+
+std::string Selection::getStringParameter(std::string name) {
+  return _stringPar[name];
 }
 
 bool Selection::passCut(std::string name, float var) {
@@ -136,6 +175,14 @@ void Selection::summary() {
     std::cout << "*** " << iter->first << " within [" << range.first << " - " << range.second << "]" 
 	      << e0 << "\tStatus is: " << cutStatus << en
 	      << std::endl; 
+  }
+  
+  std::map< std::string,std::string >::iterator strpar;
+  for( strpar = _stringPar.begin(); strpar!=_stringPar.end(); strpar++) {
+    const char* e0 = "\033[42;37m";
+    const char* en="\033[0m";
+    std::cout << "*** " << e0 << "Parameter " << strpar->first
+              << " has value " << strpar->second << en << std::endl;
   }
 }
 

@@ -22,10 +22,13 @@ public:
   void addCut(std::string name);
   //! add a switch to enable something from file
   void addSwitch(std::string name);
+  //! add a parameter with a string value
+  void addStringParameter(std::string name);
 
   //! retrieve selection configuration
   std::pair<float,float> getCut(std::string name);
   int getSwitch(std::string name);
+  std::string getStringParameter(std::string name);
 
   //! apply cut on a single var
   bool passCut(std::string name, float var);
@@ -50,9 +53,11 @@ public:
 private:
   std::pair<float,float> readIntervalFromFile(std::string name);
   int readSwitchFromFile(std::string name);
+  std::string readStringFromFile(std::string name);
   std::string _fileCut, _fileSwitch;
   std::map<std::string,std::pair<float,float> > _cut;
   std::map<std::string,int> _switch;
+  std::map<std::string,std::string> _stringPar;
 
   
 };
