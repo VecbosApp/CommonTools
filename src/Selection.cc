@@ -10,7 +10,7 @@ Selection::~Selection() {}
 
 std::pair<float,float> Selection::readIntervalFromFile(std::string name) {
 
-  std::pair<float,float> defRange(-99999.,99999.);
+  std::pair<float,float> defRange(-999999.,999999.);
   float min, max;
   std::ifstream setfile(_fileCut.c_str());
   if(!setfile.good()) {
@@ -105,7 +105,7 @@ void Selection::addCut(std::string name) {
   _cut.insert( make_pair( name, range) );
 
   // add the correspondent switches
-  int switchStatus = (range.second < 99998 ) ? readSwitchFromFile(name) : 0;
+  int switchStatus = (range.second < 999998 ) ? readSwitchFromFile(name) : 0;
   _switch.insert( make_pair( name, switchStatus) );
 }
 
