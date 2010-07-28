@@ -9,7 +9,8 @@ class Utils {
 public:
 
   Utils() { }
-
+  //! returns the values of the requested HLT triggers
+  std::vector<int> getTriggers(std::vector<int> requiredTriggers, int firedTrg[4]);
   //! returns the AND of the requested HLT triggers
   bool getTriggersAND(std::vector<int> requiredTriggers, int firedTrg[4]);
   //! returns the OR of the requested HLT triggers

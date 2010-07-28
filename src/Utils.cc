@@ -4,6 +4,19 @@
 
 using namespace bits;
 
+std::vector<int> Utils::getTriggers(std::vector<int> requiredTriggers, int firedTrg[4]) {
+  std::vector<int> out;
+
+  // unpack the trigger words
+  for( int i=0; i<requiredTriggers.size(); i++ ) {
+    std::vector<int> in;
+    in.push_back(requiredTriggers[i]);
+    out.push_back(getTriggersAND(in, firedTrg));
+    in.clear();
+  }
+  return out;
+}
+
 bool Utils::getTriggersAND(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
   if ( requiredTriggers.size() == 0 ) return true;
