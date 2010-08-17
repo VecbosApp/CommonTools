@@ -144,3 +144,10 @@ bool Utils::electronEnergyCorrectionType(int word, ElectronEnergyCorrectionBit b
   return (word >> bit)%2;
   
 }
+
+bool Utils::jetIdVal(int word, bits::Version version, bits:: Quality quality) {
+
+  int bit = version*3+quality;
+  return (word >> bit)%2;
+
+}

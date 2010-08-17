@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "CommonTools/include/LeptonIdBits.h"
+#include "CommonTools/include/JetIdBits.h"
 
 class Utils {
 
@@ -34,6 +35,8 @@ public:
   bool electronRecoType(int word, bits::ElectronRecoBit bit);
   //! get value of the bit corresponding to energy correction type
   bool electronEnergyCorrectionType(int word, bits::ElectronEnergyCorrectionBit bit);
+  //! get value of the JetID bit corresponding to certain jet ID Version and Quality
+  bool jetIdVal(int word, bits::Version version, bits:: Quality quality);
 
 protected:
 
