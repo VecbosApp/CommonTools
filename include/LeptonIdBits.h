@@ -12,7 +12,7 @@ enum MuonIdBit { TMLastStationOptimizedLowPtTight=0, TMLastStationOptimizedLowPt
                  AllTrackerMuons=11, AllStandAloneMuons=12, AllGlobalMuons=13 };
 
 enum ElectronIdBit { eleIdRobustHighEnergy=0, eleIdRobustTight=1, eleIdRobustLoose=2, eleIdTight=3, eleIdLoose=4,
-                     eleIdHypertight1CIC=5, eleIdSuperTightCIC=6, eleIdTightCIC=7, eleIdMediumCIC=8, eleIdLooseCIC=9,
+                     eleIdHyperTight1CIC=5, eleIdSuperTightCIC=6, eleIdTightCIC=7, eleIdMediumCIC=8, eleIdLooseCIC=9,
                      eleIdVeryLooseCIC=10};
  
 enum ElectronFiducialBit { isEERingGap=0, isEEDeeGap=1, isEEGap=2, isEBPhiGap=3, isEBEtaGap=4, isEBGap=5, isEBEEGap=6, isGap=7, isEE=8, isEB=9 };
