@@ -103,7 +103,7 @@ bool Utils::isInElectronFiducialEta(float eta) {
 
 bool Utils::isInECALFiducial(int word) {
 
-  return ( ( (word >> isEE)%2 || (word >> isEB)%2 ) && !((word >> isGap)%2) );
+  return ( ( (word >> isEE)%2 || (word >> isEB)%2 ) && !((word >> isEBEEGap)%2) );
 
 }
 
