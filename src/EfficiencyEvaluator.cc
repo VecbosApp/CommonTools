@@ -172,6 +172,33 @@ std::vector<TH1F*> EfficiencyEvaluator::GetCumulativeEfficiencies() {
 }
 
 
+std::vector<float> EfficiencyEvaluator::GetCumulativeEfficiencyAverages() {
+
+  std::vector<float> output;
+  
+  std::vector<TH1F*>::const_iterator effItr;
+  for(effItr=_efficiencies.begin(); effItr!=_efficiencies.end(); ++effItr) {
+    TH1F* histogram = *effItr;
+    TString name = histogram->GetName();
+    if ( !name.Contains("EffWrtPrevious") ) {
+      float num, denom;
+      num = denom = 0.0;
+      for(int i=0; i<histogram->GetNbinsX(); ++i) {
+        float y = histogram->GetBinContent(i);
+        float ey = histogram->GetBinError(i);
+        if(ey>0) {
+          num += y/ey/ey;
+          denom += 1/ey/ey;
+        }
+      }
+      output.push_back(num/denom);
+    }
+  }
+  
+  return output;
+
+}
+
 std::vector<TH1F*> EfficiencyEvaluator::GetSingleCutEfficiencies() {
 
   std::vector<TH1F*> output;

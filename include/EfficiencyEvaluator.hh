@@ -38,6 +38,8 @@ public:
   void DrawAll();
   //! retrieve the vector of cumulative efficiencies
   std::vector<TH1F*> GetCumulativeEfficiencies();
+  //! retrieve the vector of weighted average of cumulative efficiencies
+  std::vector<float> GetCumulativeEfficiencyAverages();
   //! retrieve the vector of single cut efficiencies
   std::vector<TH1F*> GetSingleCutEfficiencies();
   //! set the X axis title
