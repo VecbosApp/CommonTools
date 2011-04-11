@@ -39,7 +39,8 @@ public:
   //! retrieve the vector of cumulative efficiencies
   std::vector<TH1F*> GetCumulativeEfficiencies();
   //! retrieve the vector of weighted average of cumulative efficiencies
-  std::vector<float> GetCumulativeEfficiencyAverages();
+  //! if called with default arguments it integrates over the whole range
+  std::vector<float> GetCumulativeEfficiencyAverages(int firstBin=-1, int lastBin=-1);
   //! retrieve the vector of single cut efficiencies
   std::vector<TH1F*> GetSingleCutEfficiencies();
   //! set the X axis title

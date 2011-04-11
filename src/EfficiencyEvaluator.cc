@@ -172,7 +172,7 @@ std::vector<TH1F*> EfficiencyEvaluator::GetCumulativeEfficiencies() {
 }
 
 
-std::vector<float> EfficiencyEvaluator::GetCumulativeEfficiencyAverages() {
+std::vector<float> EfficiencyEvaluator::GetCumulativeEfficiencyAverages(int firstBin, int lastBin) {
 
   std::vector<float> output;
   
@@ -183,7 +183,9 @@ std::vector<float> EfficiencyEvaluator::GetCumulativeEfficiencyAverages() {
     if ( !name.Contains("EffWrtPrevious") ) {
       float num, denom;
       num = denom = 0.0;
-      for(int i=0; i<histogram->GetNbinsX(); ++i) {
+      int minBin = (firstBin==-1) ? 0 : firstBin;
+      int maxBin = (lastBin==-1) ? histogram->GetNbinsX() : lastBin;
+      for(int i=minBin; i<=maxBin; ++i) {
         float y = histogram->GetBinContent(i);
         float ey = histogram->GetBinError(i);
         if(ey>0) {
