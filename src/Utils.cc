@@ -19,8 +19,6 @@ std::vector<int> Utils::getTriggers(std::vector<int> requiredTriggers, int fired
 
 bool Utils::getTriggersAND(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
-  if ( requiredTriggers.size() == 0 ) return true;
-
   // unpack the trigger words
   for( int i=0; i<requiredTriggers.size(); i++ ) {
     
@@ -37,8 +35,6 @@ bool Utils::getTriggersAND(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
 bool Utils::getTriggersOR(std::vector<int> requiredTriggers, int firedTrg[4]) {
 
-  if ( requiredTriggers.size() == 0 ) return true;
-  
   // unpack the trigger words
   for( int i=0; i<requiredTriggers.size(); i++ ) {
 
