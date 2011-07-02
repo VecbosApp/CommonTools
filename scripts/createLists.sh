@@ -7,7 +7,7 @@ listdir=$2
 echo "scanning $maindir"
 
 rfdir $maindir | awk '{print $9}' > datasets.txt
-rfdir $maindir | awk '{print "'"$maindir"'" "/" $9}' | xargs -i echo "rfdir " {} " | grep -v \" 0 \" | awk '{print \"rfio:{}/\" \$9}'" > commands.txt 
+rfdir $maindir | awk '{print "'"$maindir"'" "/" $9}' | xargs -i echo "rfdir " {} " | grep -v \" 0 \" | awk '{print \"{}/\" \$9}'" > commands.txt 
 
 
 N=0
