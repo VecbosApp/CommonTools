@@ -52,6 +52,8 @@ class PUWeight {
   // Get the histogram with the profile for MC
   TH1F* GetMCHisto() const {return (TH1F*)fMC->Clone();}
 
+  void SetMCHistogram(const TH1F* mcHisto);
+
  protected:
   // Build the PU ideal profile for MC
   TH1F* IdealMCHistogram();

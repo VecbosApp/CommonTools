@@ -6,7 +6,7 @@
 //    DATE: 09/03/2011
 //
 ///////////////////////////////////////////////////////////////////////
-#include "CommonTools/include/PUWeight.h"
+#include "/cmsrm/pc18/pandolf/CMSSW_4_2_3_patch1/src/UserCode/emanuele/CommonTools/include/PUWeight.h"
 
 // ROOT Includes
 #include "TFile.h"
@@ -110,6 +110,20 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
 
   fds->Close();
   return fMC;
+  
+}
+
+void PUWeight::SetMCHistogram(const TH1F* mcHisto) {
+
+  fMC = (TH1F*)mcHisto->Clone();
+
+  if (fMC->Integral() != 1) {
+    cout << "NOTE [PUWeight]: MC histogram is not normalized to 1! Normalizing..."
+	 << endl;
+    fMC->Scale(1./fMC->Integral());
+  }
+
+  CalculateWeight();
   
 }
 
