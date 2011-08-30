@@ -19,7 +19,7 @@
 class PUWeight {
  public:
   PUWeight(float luminosity, const char* year="2011A");
-  PUWeight(const char* mcsample="summer11", const char* mcproccess="DYpu",
+  PUWeight(const char* mcsample="summer11", const char* mcproccess="DY",
 	   float luminosity = -1, const char* year="2011A");
   ~PUWeight() {delete fWeight; delete fMC; delete fData;}
 
