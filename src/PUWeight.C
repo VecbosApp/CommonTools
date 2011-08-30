@@ -6,7 +6,7 @@
 //    DATE: 09/03/2011
 //
 ///////////////////////////////////////////////////////////////////////
-#include "/cmsrm/pc18/pandolf/CMSSW_4_2_3_patch1/src/UserCode/emanuele/CommonTools/include/PUWeight.h"
+#include "CommonTools/include/PUWeight.h"
 
 // ROOT Includes
 #include "TFile.h"
