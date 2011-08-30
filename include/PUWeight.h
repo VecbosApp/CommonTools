@@ -13,21 +13,18 @@
 #ifndef PUWEIGHT_H
 #define PUWEIGHT_H 1
 
-
 #include "TH1F.h"
 #include "TNamed.h"
 
 class PUWeight {
  public:
-  PUWeight(float luminosity = -1, const char* year="2011A");
-  PUWeight(const char* mcfolder, const char* mcproccess,
+  PUWeight(float luminosity, const char* year="2011A");
+  PUWeight(const char* mcsample="summer11", const char* mcproccess="DYpu",
 	   float luminosity = -1, const char* year="2011A");
   ~PUWeight() {delete fWeight; delete fMC; delete fData;}
 
-
   // Tells if this object has loaded correctly the histograms
   bool IsValid() const { return fWeight;}
-
 
   // Returns the weight for a given PU value
   float GetWeight(unsigned int pu) const {

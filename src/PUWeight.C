@@ -17,7 +17,6 @@
 #include <iostream>
 using namespace std;
 
-
 //Set DEBUGPUWEIGHT to 1 to get some debug information. Set it to 2 for more
 //detail debug information.
 #define DEBUGPUWEIGHT 2
@@ -26,57 +25,49 @@ using namespace std;
 #define DEBUGPUWEIGHT 1
 #endif
 
-
 PUWeight::PUWeight(float luminosity, const char* year):
   fData(0),
   fMC(0),
   fWeight(0) {
-
-  //Load Data histogram
-  if (!LoadDataHistogram(luminosity, year))
-    return;
-
-  //No MC given. Take ideal MC
+  
+  std::cout << "PU reweighting (old constructor): reading ideal MC" << std::endl;
+  
+  // Load Data histogram
+  if (!LoadDataHistogram(luminosity, year)) return;
+  
+  // No MC given. Take ideal MC
   IdealMCHistogram();
-
-
+  
   //Calculate Weight
   CalculateWeight();
 }
 
-
-PUWeight::PUWeight(const char* mcfolder, const char* mcproccess, 
-		   float luminosity, const char* year):
+PUWeight::PUWeight(const char* mcfolder, const char* mcproccess, float luminosity, const char* year):
+		   
   fData(0),
   fMC(0),
   fWeight(0) {
 
-  //Load Data histogram
-  if (!LoadDataHistogram(luminosity, year))
-    return;
+  std::cout << "PU reweighting (new constructor): reading both data and MC from file" << std::endl;
+
+  // Load Data histogram
+  if (!LoadDataHistogram(luminosity, year)) return;
   
-  //Load MC Histogram
-  if (!LoadMCHistogram(mcfolder, mcproccess))
-    return;
-
-
-
-  //Calculate Weight
+  // Load MC Histogram
+  if (!LoadMCHistogram(mcfolder, mcproccess)) return;
+  
+  // Calculate Weight
   CalculateWeight();
 }
 
-
-
-
 TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
 #ifdef DEBUGPUWEIGHT
-  cout << ">> Getting pileup for the MC " << mcproccess 
-       << " inside " << mcfolder << "..." << endl;
+  cout << ">> Getting pileup for the MC " << mcproccess << " inside " << mcfolder << "..." << endl;
 #endif
   
   TString dsfile;
-  dsfile.Form("http://www.hep.uniovi.es/jfernan/PUhistos/%s/%s.root", 
-	      mcfolder, mcproccess);
+  dsfile.Form("/afs/cern.ch/user/c/crovelli/public/puReweighting/%s/%s_PU.root", mcfolder, mcproccess);
+	      
 #if (DEBUGPUWEIGHT > 1)
   cout << "   + Opening " << dsfile << endl;
 #endif
@@ -89,7 +80,7 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
     return 0;
   }
   
-  //Read dataset histogram...
+  // Read dataset histogram...
 #if (DEBUGPUWEIGHT > 1)
   cout << "   + Looking for histogram..." << endl;
 #endif
@@ -109,14 +100,13 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
   }
 
   fds->Close();
-  return fMC;
-  
+  return fMC;  
 }
 
 void PUWeight::SetMCHistogram(const TH1F* mcHisto) {
 
   fMC = (TH1F*)mcHisto->Clone();
-
+  
   if (fMC->Integral() != 1) {
     cout << "NOTE [PUWeight]: MC histogram is not normalized to 1! Normalizing..."
 	 << endl;
@@ -124,28 +114,23 @@ void PUWeight::SetMCHistogram(const TH1F* mcHisto) {
   }
 
   CalculateWeight();
-  
 }
-
 
 TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
 
 #ifdef DEBUGPUWEIGHT
-  cout << ">> Getting pileup for the " << luminosity << " pb-1 of data..." 
-       << endl;
+  cout << ">> Getting pileup for the " << luminosity << " pb-1 of data..." << endl;       
 #endif
   
   TString dtfile;
   TFile* fdt = 0;
   if (luminosity > 0) {
-    dtfile.Form("http://www.hep.uniovi.es/jfernan/PUhistos/Data%s/PUdata_%.1f.root", 
-		year, luminosity);
-
-  
+    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_172802_LP_LumiScale.root");
+		  
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
 #endif
-
+    
     fdt = TFile::Open(dtfile);
     if (!fdt) {
       cerr << "NOTE [PUWeight]: Could not find file " << dtfile << "!"  << endl;
@@ -154,12 +139,12 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
   }
 
   if (!fdt) {
-    dtfile="http://www.hep.uniovi.es/jfernan/PUhistos/Data2011A/PUdata.root";
-
+    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_172802_LP_LumiScale.root";
+    
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
 #endif
-
+    
     fdt = TFile::Open(dtfile);
     if (!fdt) {
       cerr << "ERROR [PUWeight]: Could not find default profile in \"" 
