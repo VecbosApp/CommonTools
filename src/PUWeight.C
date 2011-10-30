@@ -66,7 +66,7 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
 #endif
   
   TString dsfile;
-  dsfile.Form("/afs/cern.ch/user/c/crovelli/public/puReweighting/%s/%s_PU.root", mcfolder, mcproccess);
+  dsfile.Form("/afs/cern.ch/user/e/emanuele/public/puReweighting/%s/%s_PU.root", mcfolder, mcproccess);
 	      
 #if (DEBUGPUWEIGHT > 1)
   cout << "   + Opening " << dsfile << endl;
@@ -85,7 +85,7 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
   cout << "   + Looking for histogram..." << endl;
 #endif
   
-  fMC = (TH1F*) fds->Get("htemp")->Clone("PU_MC");
+  fMC = (TH1F*) fds->Get("hNPU")->Clone("PU_MC");
   if (!fMC) {
     cerr << "ERROR [PUWeight]: Could not find histogram for dataset " << mcproccess << "!"
 	 << endl;
@@ -125,7 +125,8 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
   TString dtfile;
   TFile* fdt = 0;
   if (luminosity > 0) {
-    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_172802_LP_LumiScale.root");
+    //    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_173692_LPLumiScale_68mb.root");
+    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root");
 		  
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
@@ -139,8 +140,9 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
   }
 
   if (!fdt) {
-    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_172802_LP_LumiScale.root";
-    
+    //    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_173692_LPLumiScale_68mb.root";
+    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root";
+
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
 #endif
@@ -167,6 +169,7 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
     cout << "NOTE [PUWeight]: Data histogram is not normalized to 1! Normalizing..."
 	 << endl;
     fData->Scale(1./fData->Integral());
+    fData->GetXaxis()->Set(51,-0.5,50.5);
   }
 
   fdt->Close();
