@@ -66,8 +66,9 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
 #endif
   
   TString dsfile;
-  dsfile.Form("/afs/cern.ch/user/e/emanuele/public/puReweighting/%s/%s_PU.root", mcfolder, mcproccess);
-	      
+  //  dsfile.Form("/afs/cern.ch/user/e/emanuele/public/puReweighting/%s/%s_PU.root", mcfolder, mcproccess); // for Summer 11 MC sample
+  dsfile.Form("/afs/cern.ch/user/m/mwlebour/public/s6MCPileUp.root"); // for Fall 11 MC sample
+      
 #if (DEBUGPUWEIGHT > 1)
   cout << "   + Opening " << dsfile << endl;
 #endif
@@ -85,7 +86,7 @@ TH1F* PUWeight::LoadMCHistogram(const char* mcfolder, const char* mcproccess) {
   cout << "   + Looking for histogram..." << endl;
 #endif
   
-  fMC = (TH1F*) fds->Get("hNPU")->Clone("PU_MC");
+  fMC = (TH1F*) fds->Get("pileup")->Clone("PU_MC");
   if (!fMC) {
     cerr << "ERROR [PUWeight]: Could not find histogram for dataset " << mcproccess << "!"
 	 << endl;
@@ -126,8 +127,9 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
   TFile* fdt = 0;
   if (luminosity > 0) {
     //    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_173692_LPLumiScale_68mb.root");
-    dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root");
-		  
+    // dtfile.Form("/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root");
+    dtfile.Form("/afs/cern.ch/user/s/sixie/public/Pileup/targets/PUTarget.Full2011.160404-180252.root");
+	  
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
 #endif
@@ -141,7 +143,8 @@ TH1F* PUWeight::LoadDataHistogram(float luminosity, const char* year) {
 
   if (!fdt) {
     //    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Pileup_2011_to_173692_LPLumiScale_68mb.root";
-    dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root";
+    // dtfile="/afs/cern.ch/cms/CAF/CMSCOMM/COMM_DQM/certification/Collisions11/7TeV/PileUp/Cert_175832-177515_PromptReco_JSON.pileupTruth_v2.root";
+    dtfile="/afs/cern.ch/user/s/sixie/public/Pileup/targets/PUTarget.Full2011.160404-180252.root";
 
 #if (DEBUGPUWEIGHT > 1)
     cout << "   + Opening " << dtfile << endl;
