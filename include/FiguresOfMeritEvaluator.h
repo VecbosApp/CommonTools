@@ -41,6 +41,9 @@ class FiguresOfMeritEvaluator {
   //! compute FOM vor a certain variable
   TGraph* getFOM(const char *nameVar, int option=0);
 
+  //! put a nice axis font
+  void AxisFonts(TAxis*  axis, TString coordinate, TString title);
+
   //! list of variables
   std::vector<TH1F*> m_signalHisto;
   std::vector<TH1F*> m_bkgHisto;
@@ -55,6 +58,12 @@ class FiguresOfMeritEvaluator {
 
   //! ranges of the final plot
   double m_xmin, m_xmax, m_ymin, m_ymax; 
+
+  //! cosmetics
+  Int_t   _labelFont      ;
+  Float_t _labelOffset    ;
+  Float_t _axisLabelSize  ;
+  Float_t _titleOffset    ;
 
 };
 

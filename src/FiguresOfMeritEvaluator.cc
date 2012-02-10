@@ -16,6 +16,11 @@ FiguresOfMeritEvaluator::FiguresOfMeritEvaluator() {
   m_signalTitle = "signal";
   m_backgroundTitle = "background";
 
+  _labelFont        = 42;
+  _labelOffset      = 0.015;
+  _axisLabelSize    = 0.050;
+  _titleOffset      = 1.6;
+  
 }
 
 void FiguresOfMeritEvaluator::addSignal(const char *nameVar, TH1F* sig) {
@@ -61,6 +66,12 @@ TGraph* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
   const char *cutDir = m_direction[indexVar];
 
   if( signal && background ) {
+
+    std::cout << "Integral of signal histogram " << signal->GetName() << " = " 
+	      << signal->Integral() << std::endl;
+    std::cout << "Integral of background histogram " << background->GetName() << " = " 
+	      << background->Integral() << std::endl;
+    
     TAxis *axisS = signal->GetXaxis();
     TAxis *axisB = background->GetXaxis();
     int nBinsSig = axisS->GetNbins();
@@ -100,7 +111,7 @@ TGraph* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
       double signalEff = tmpSignalIntegral / signalIntegral;
       double backgroundEff = tmpBackgroundIntegral / backgroundIntegral;
 
-      //      std::cout << "bin =" << ibin << " sigEff=" << signalEff << " bkgEff=" << backgroundEff << std::endl;
+      // std::cout << "bin =" << ibin << " sigEff=" << signalEff << " bkgEff=" << backgroundEff << std::endl;
 
       if( option == 0 ) {
 	outGraph->SetPoint(ibin,signalEff,1-backgroundEff);
@@ -137,11 +148,15 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
   }
   
 
-  TCanvas c1("c1","--c1--",356,0,656,800);
+  TCanvas c1("c1","",600,600);
 
-  TLegend* leg = new TLegend(0.50,0.75,0.70,0.90);
-  leg->SetFillStyle(0); leg->SetBorderSize(0); leg->SetTextSize(0.03); 
-  leg->SetFillColor(0);
+  TLegend* leg = new TLegend(0.10,0.10,0.50,0.40);
+  leg->SetBorderSize(     0);
+  leg->SetFillColor (     0);
+  leg->SetTextAlign (    12);
+  leg->SetTextFont  (_labelFont);
+  leg->SetTextSize  (  0.05);
+    
 
   for( unsigned int ivar=0; ivar<m_signalHisto.size(); ivar++) {
 
@@ -171,6 +186,9 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       graph->GetXaxis()->SetTitle(xAxisName.c_str());
       graph->GetYaxis()->SetTitle(yAxisName.c_str());
       
+      AxisFonts(graph->GetXaxis(), "x", graph->GetXaxis()->GetTitle());
+      AxisFonts(graph->GetYaxis(), "y", graph->GetYaxis()->GetTitle());
+      
       if(ivar==0) graph->Draw("AP");
       else  graph->Draw("P");
 
@@ -196,4 +214,24 @@ void FiguresOfMeritEvaluator::setRange(double xmin, double xmax, double ymin, do
   m_ymin = ymin;
   m_ymax = ymax;
 
+}
+
+  //------------------------------------------------------------------------------
+  // AxisFonts
+  //------------------------------------------------------------------------------
+void FiguresOfMeritEvaluator::AxisFonts(TAxis*  axis,
+					TString coordinate,
+					TString title)
+{
+  axis->SetLabelFont  (_labelFont  );
+  // axis->SetLabelOffset(_labelOffset);
+  // axis->SetLabelSize  (_axisLabelSize);
+  // axis->SetNdivisions (  505);
+  axis->SetTitleFont  (_labelFont);
+  // axis->SetTitleOffset(  1.5);
+  // axis->SetTitleSize  (_axisLabelSize);
+  
+  //  if (coordinate == "y") axis->SetTitleOffset(_titleOffset);
+  
+  axis->SetTitle(title);
 }
