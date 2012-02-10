@@ -4,7 +4,11 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TStyle.h"
+#include "TObjArray.h"
+#include "TObjString.h"
 #include "TROOT.h"
+
+using namespace std;
 
 FiguresOfMeritEvaluator::FiguresOfMeritEvaluator() {
 
@@ -171,9 +175,10 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       leg->AddEntry(graph,name,"p");
 
       graph->SetTitle("");
-      graph->SetMarkerStyle(8);
+      graph->SetMarkerStyle(24);
       graph->SetMarkerColor(ivar+1);
       graph->SetLineColor(ivar+1);
+      graph->SetLineWidth(2);
       graph->GetXaxis()->SetRangeUser(m_xmin,m_xmax);
       graph->GetYaxis()->SetRangeUser(m_ymin,m_ymax);
       
@@ -189,8 +194,8 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       AxisFonts(graph->GetXaxis(), "x", graph->GetXaxis()->GetTitle());
       AxisFonts(graph->GetYaxis(), "y", graph->GetYaxis()->GetTitle());
       
-      if(ivar==0) graph->Draw("AP");
-      else  graph->Draw("P");
+      if(ivar==0) graph->Draw("APE2");
+      else  graph->Draw("PE2");
 
       std::cout << " done." << std::endl;
 
@@ -203,7 +208,16 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
   }
   
   leg->Draw();
-  c1.SaveAs(fileName);
+  
+  TString fullname(fileName);
+  TObjArray *tokens = fullname.Tokenize(".");
+  const char *basename = (((TObjString*)(*tokens)[0])->GetString()).Data();
+
+  TString pdf = TString(basename)+TString(".pdf");
+  TString png = TString(basename)+TString(".png");
+
+  c1.SaveAs(pdf);
+  c1.SaveAs(png);
   
 }
 
