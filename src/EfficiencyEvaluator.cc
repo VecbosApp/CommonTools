@@ -31,7 +31,10 @@ void EfficiencyEvaluator::ComputeEfficiencies(bool doAlsoPartialEfficiency) {
       eff->SetBinError(i,efferrVal);
       // corret division by 0 for empty bins
       float denomVal = _denominator->GetBinContent(i);
-      if ( denomVal==0 ) eff->SetBinContent(i,0);
+      if ( denomVal==0 ) {
+	eff->SetBinContent(i,0);
+	eff->SetBinError(i,0);
+      }
     }
     _efficiencies.push_back(eff);
   }
