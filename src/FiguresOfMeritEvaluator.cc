@@ -175,9 +175,14 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       leg->AddEntry(graph,name,"p");
 
       graph->SetTitle("");
-      graph->SetMarkerStyle(24);
-      graph->SetMarkerColor(ivar+1);
-      graph->SetLineColor(ivar+1);
+      graph->SetMarkerStyle(20);
+      int defColor;
+      if(ivar==0) defColor=kRed+1;
+      else if(ivar==1) defColor=kAzure-6;
+      else if(ivar==2) defColor=kTeal+3;
+      else defColor = ivar+1;
+      graph->SetMarkerColor(defColor);
+      graph->SetLineColor(defColor);
       graph->SetLineWidth(2);
       graph->GetXaxis()->SetRangeUser(m_xmin,m_xmax);
       graph->GetYaxis()->SetRangeUser(m_ymin,m_ymax);
