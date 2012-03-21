@@ -166,7 +166,7 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
 
     const char *name = m_names[ivar].Data();
 
-    TGraph *graph = getFOM(name);
+    TGraph *graph = getFOM(name,option);
 
     if( graph ) {
 
