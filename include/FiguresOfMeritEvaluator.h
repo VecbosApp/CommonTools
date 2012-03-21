@@ -4,7 +4,7 @@
 #include <vector>
 #include "TString.h"
 #include "TH1F.h"
-#include "TGraph.h"
+#include "TGraphErrors.h"
 
 class FiguresOfMeritEvaluator {
 
@@ -39,7 +39,7 @@ class FiguresOfMeritEvaluator {
  private:
 
   //! compute FOM vor a certain variable
-  TGraph* getFOM(const char *nameVar, int option=0);
+  TGraphErrors* getFOM(const char *nameVar, int option=0);
 
   //! put a nice axis font
   void AxisFonts(TAxis*  axis, TString coordinate, TString title);

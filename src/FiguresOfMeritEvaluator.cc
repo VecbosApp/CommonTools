@@ -7,6 +7,7 @@
 #include "TObjArray.h"
 #include "TObjString.h"
 #include "TROOT.h"
+#include <math.h>
 
 using namespace std;
 
@@ -45,9 +46,9 @@ void FiguresOfMeritEvaluator::addBackgrounds(TH1F* bkg0, TH1F* bkg1,
 
 }
 
-TGraph* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
+TGraphErrors* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
   
-  TGraph *outGraph = new TGraph();
+  TGraphErrors *outGraph = new TGraphErrors();
 
   int indexVar = -1;
   for(unsigned int ivar=0; ivar<m_signalHisto.size(); ivar++) {
@@ -119,9 +120,12 @@ TGraph* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
 
       if( option == 0 ) {
 	outGraph->SetPoint(ibin,signalEff,1-backgroundEff);
+	outGraph->SetPointError(ibin,0,0);
       }
       else if( option == 1 ) {
 	outGraph->SetPoint(ibin,signalEff,backgroundEff);
+	double backgroundEffErr = sqrt(backgroundEffErr*(1-backgroundEffErr)/backgroundIntegral);
+	outGraph->SetPointError(ibin,0.,backgroundEffErr);
       }
       else {
 	std::cout << "unrecognized option" << std::endl;
@@ -154,19 +158,32 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
 
   TCanvas c1("c1","",600,600);
 
-  TLegend* leg = new TLegend(0.10,0.10,0.50,0.40);
+  float legxmin, legxmax, legymin,legymax;
+  if(option==0) {
+    legxmin=0.20;
+    legxmax=0.40;
+    legymin=0.20;
+    legymax=0.30;
+  } else {
+    legxmin=0.20;
+    legxmax=0.40;
+    legymin=0.60;
+    legymax=0.80;
+  }
+
+  TLegend* leg = new TLegend(legxmin,legymin,legxmax,legymax);
   leg->SetBorderSize(     0);
   leg->SetFillColor (     0);
   leg->SetTextAlign (    12);
   leg->SetTextFont  (_labelFont);
-  leg->SetTextSize  (  0.05);
+  leg->SetTextSize  (  0.03);
     
 
   for( unsigned int ivar=0; ivar<m_signalHisto.size(); ivar++) {
 
     const char *name = m_names[ivar].Data();
 
-    TGraph *graph = getFOM(name,option);
+    TGraphErrors *graph = getFOM(name,option);
 
     if( graph ) {
 
