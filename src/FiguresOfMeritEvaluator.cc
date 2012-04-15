@@ -4,6 +4,7 @@
 #include "TCanvas.h"
 #include "TLegend.h"
 #include "TStyle.h"
+#include "TString.h"
 #include "TObjArray.h"
 #include "TObjString.h"
 #include "TROOT.h"
@@ -29,24 +30,33 @@ FiguresOfMeritEvaluator::FiguresOfMeritEvaluator() {
 }
 
 void FiguresOfMeritEvaluator::addSignal(const char *nameVar, TH1F* sig) {
-
   m_signalHisto.push_back(sig);
   m_names.push_back(TString(nameVar));
+}
 
+void FiguresOfMeritEvaluator::addSignal(const char *nameVar, TH2F* sig) {
+  m_signalHisto2D.push_back(sig);
+  m_names2D.push_back(TString(nameVar));
 }
 
 void FiguresOfMeritEvaluator::addBackgrounds(TH1F* bkg0, TH1F* bkg1, 
 					     TH1F* bkg2, TH1F* bkg3) {
-
   if(bkg1) bkg0->Add(bkg1);
   if(bkg2) bkg0->Add(bkg2);
   if(bkg3) bkg0->Add(bkg3);
-
   m_bkgHisto.push_back(bkg0);
-
 }
 
-TGraphErrors* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
+void FiguresOfMeritEvaluator::addBackgrounds(TH2F* bkg0, TH2F* bkg1, 
+					     TH2F* bkg2, TH2F* bkg3) {
+  if(bkg1) bkg0->Add(bkg1);
+  if(bkg2) bkg0->Add(bkg2);
+  if(bkg3) bkg0->Add(bkg3);
+  m_bkgHisto2D.push_back(bkg0);
+}
+
+
+TGraphErrors* FiguresOfMeritEvaluator::getFOM1D(const char *nameVar, int option) {
   
   TGraphErrors *outGraph = new TGraphErrors();
 
@@ -145,6 +155,147 @@ TGraphErrors* FiguresOfMeritEvaluator::getFOM(const char *nameVar, int option) {
 
 }
 
+TGraphErrors* FiguresOfMeritEvaluator::getFOM2D(const char *nameVar, int option) {
+  
+  TGraphErrors *outGraph = new TGraphErrors();
+  TGraphErrors *outGraphEnvelope = new TGraphErrors();
+
+  int indexVar = -1;
+  for(unsigned int ivar=0; ivar<m_signalHisto2D.size(); ivar++) {
+
+    if (m_names2D[ivar].Contains(nameVar) && 
+	TString(nameVar).Contains(m_names2D[ivar])) indexVar=ivar;
+    
+  }
+
+  if ( indexVar==-1 ) {
+
+    std::cout << "ERROR! The requested variable ( "
+	      << nameVar << " ) is not in the list of known variables!" << std::endl;
+    return 0;
+
+  }
+
+  TH2F *signal = m_signalHisto2D[indexVar];
+  TH2F *background = m_bkgHisto2D[indexVar];
+  TString cutDirXY = TString(m_directionXY[indexVar]);
+
+  TObjArray* selectionTokens = cutDirXY.Tokenize(":");
+  if (selectionTokens->GetEntries()!=2) {
+    std::cout << "Wrong directions. Format should be like <:< " << selectionTokens->GetEntries() << std::endl;
+    return 0;
+  }
+  TString cutDirX =((TObjString*)(*selectionTokens)[0])->GetString();
+  TString cutDirY =((TObjString*)(*selectionTokens)[1])->GetString();
+
+  if( signal && background ) {
+
+    std::cout << "Integral of signal histogram " << signal->GetName() << " = " 
+	      << signal->Integral() << std::endl;
+    std::cout << "Integral of background histogram " << background->GetName() << " = " 
+	      << background->Integral() << std::endl;
+    
+    TAxis *XaxisS = signal->GetXaxis();
+    TAxis *YaxisS = signal->GetYaxis();
+    TAxis *XaxisB = background->GetXaxis();
+    TAxis *YaxisB = background->GetYaxis();
+    int nXBinsSig = XaxisS->GetNbins();
+    int nYBinsSig = YaxisS->GetNbins();
+    int nXBinsBkg = XaxisB->GetNbins();
+    int nYBinsBkg = YaxisB->GetNbins();
+    
+    if( nXBinsSig!=nXBinsBkg || nYBinsSig!=nYBinsBkg ) {
+      std::cout << "ERROR! signal and background histograms have different binning." 
+		<< std::endl;
+      return 0;
+    }
+
+    // needed also overflow + underflow
+    outGraph->Set((nXBinsSig+2)*(nYBinsSig+2));
+
+    double signalIntegral = signal->Integral(0,nXBinsSig+1,0,nYBinsSig+1);
+    double backgroundIntegral = background->Integral(0,nXBinsSig+1,0,nYBinsSig+1);
+
+    double tmpSignalIntegral=0.0;
+    double tmpBackgroundIntegral=0.0;
+
+    int ibin=0;
+    for ( int ixbin=0; ixbin<=nXBinsSig+1; ixbin++) {
+      for ( int iybin=0; iybin<=nYBinsSig+1; iybin++) {
+	
+      if( strcmp(cutDirX,"<")==0 && strcmp(cutDirY,"<")==0 ) {
+	tmpSignalIntegral = signal->Integral(0,ixbin,0,iybin);
+	tmpBackgroundIntegral = background->Integral(0,ixbin,0,iybin);
+      }
+      else if( strcmp(cutDirX,"<")==0 && strcmp(cutDirY,">")==0 ) {
+	tmpSignalIntegral = signal->Integral(0,ixbin,iybin,nYBinsSig+1);
+	tmpBackgroundIntegral = background->Integral(0,ixbin,iybin,nYBinsSig+1);
+      }
+      else if( strcmp(cutDirX,">")==0 && strcmp(cutDirY,"<")==0 ) {
+	tmpSignalIntegral = signal->Integral(ixbin,nXBinsSig+1,0,iybin);
+	tmpBackgroundIntegral = background->Integral(ixbin,nXBinsSig+1,0,iybin);
+      }
+      else if( strcmp(cutDirX,">")==0 && strcmp(cutDirY,">")==0 ) {
+	tmpSignalIntegral = signal->Integral(ixbin,nXBinsSig+1,iybin,nYBinsSig+1);
+	tmpBackgroundIntegral = background->Integral(ixbin,nXBinsSig+1,iybin,nYBinsSig+1);
+      }
+      else {
+	std::cout << "CONFIGURATION ERROR! direction of the cut not set." << std::endl
+		  << "Please use: \">\" for var>x0 or  \"<\" for var<x0" << std::endl;
+	return 0;
+      }
+      
+      double signalEff = tmpSignalIntegral / signalIntegral;
+      double backgroundEff = tmpBackgroundIntegral / backgroundIntegral;
+
+      // std::cout << "bin =" << ibin << " sigEff=" << signalEff << " bkgEff=" << backgroundEff << std::endl;
+
+      if( option == 0 ) {
+	outGraph->SetPoint(ibin,signalEff,1-backgroundEff);
+	outGraph->SetPointError(ibin,0,0);
+      }
+      else if( option == 1 ) {
+	outGraph->SetPoint(ibin,signalEff,backgroundEff);
+	double backgroundEffErr = sqrt(backgroundEffErr*(1-backgroundEffErr)/backgroundIntegral);
+	outGraph->SetPointError(ibin,0.,backgroundEffErr);
+      }
+      else {
+	std::cout << "unrecognized option" << std::endl;
+	return 0;
+      }
+      
+      ibin++;
+      }
+    }
+
+    // now get the envelope of the 2D
+    Double_t* x=outGraph->GetX();
+    Double_t* y=outGraph->GetY();
+    int npoints=outGraph->GetN();
+    
+    float effstep=1.0/float(nXBinsSig);
+    int ebin=0;
+    for(float eff=m_xmin;eff<m_xmax;eff+=effstep) {
+      // look for the min bkg efficiency compatible with the efficiency of the step
+      float ymin=1.0;
+      for(int i=0;i<npoints;i++) {
+	if(x[i]>eff-effstep && x[i]<=eff && y[i]<ymin) ymin=y[i]; 
+      }
+      outGraphEnvelope->SetPoint(ebin,eff,ymin);
+      ebin++;
+    }
+
+  } else {
+    std::cout << "ERROR! Cannot find signal or background histogram for variable "
+	      << nameVar << std::endl;
+    return 0;
+  }
+  
+  return outGraphEnvelope;
+
+}
+
+
 void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
 
   gROOT->SetStyle("Plain");
@@ -178,26 +329,40 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
   leg->SetTextFont  (_labelFont);
   leg->SetTextSize  (  0.03);
     
+  std::vector<TGraphErrors*> graphs;
 
+  // loop over 1D
   for( unsigned int ivar=0; ivar<m_signalHisto.size(); ivar++) {
-
     const char *name = m_names[ivar].Data();
+    std::cout << "---> processing " << name << "..."; 
+    TGraphErrors *graph = getFOM1D(name,option);
+    graphs.push_back(graph);
+    leg->AddEntry(graph,name,"p");
+  }
 
-    TGraphErrors *graph = getFOM(name,option);
+  // loop over 2D
+  for( unsigned int ivar=0; ivar<m_signalHisto2D.size(); ivar++) {
+    const char *name = m_names2D[ivar].Data();
+    std::cout << "---> processing " << name << "..."; 
+    TGraphErrors *graph = getFOM2D(name,option);
+    graphs.push_back(graph);
+    leg->AddEntry(graph,name,"p");
+  }
 
+  // draw the results
+  for(int ig=0;ig<(int)graphs.size();++ig) {
+    TGraphErrors* graph = graphs[ig];
     if( graph ) {
 
-      std::cout << "---> processing " << name << "..."; 
-
-      leg->AddEntry(graph,name,"p");
 
       graph->SetTitle("");
       graph->SetMarkerStyle(20);
       int defColor;
-      if(ivar==0) defColor=kRed+1;
-      else if(ivar==1) defColor=kAzure-6;
-      else if(ivar==2) defColor=kTeal+3;
-      else defColor = ivar+1;
+      if(ig==0) defColor=kRed+1;
+      else if(ig==1) defColor=kAzure-6;
+      else if(ig==2) defColor=kTeal+3;
+      else if(ig==3) defColor=kViolet+3;
+      else defColor = ig+1;
       graph->SetMarkerColor(defColor);
       graph->SetLineColor(defColor);
       graph->SetLineWidth(2);
@@ -216,15 +381,9 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       AxisFonts(graph->GetXaxis(), "x", graph->GetXaxis()->GetTitle());
       AxisFonts(graph->GetYaxis(), "y", graph->GetYaxis()->GetTitle());
       
-      if(ivar==0) graph->Draw("APE2");
+      if(ig==0) graph->Draw("APE2");
       else  graph->Draw("PE2");
 
-      std::cout << " done." << std::endl;
-
-    }
-    else {
-      std::cout << "WARNING! The requested variable " << name 
-		<< " could not have been drawn" << std::endl;
     }
 
   }
