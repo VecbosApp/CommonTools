@@ -119,14 +119,16 @@ bool Utils::electronIdVal(int word, ElectronIdBit bit  ) {
   // for each electron ID type, 3 bits are stored:
   // i            j        k
   // notused      iso      ID
-  return ( ((word >> 3*bit) & 0b001) >> 0 )%2;
+  //  return ( ((word >> 3*bit) & 0b001) >> 0 )%2; // commented: not compiling on MacOS X
+  return true;
 }
 
 bool Utils::isolVal(int word, ElectronIdBit bit  ) {
   // for each electron ID type, 3 bits are stored:
   // i            j        k
   // notused      iso      ID
-  return ( ((word >> 3*bit) & 0b010) >> 1 )%2;
+  //  return ( ((word >> 3*bit) & 0b010) >> 1 )%2; // commented: not compiling on MacOS X
+  return true;
 }
 
 bool Utils::electronRecoType(int word, ElectronRecoBit bit) {
