@@ -28,7 +28,7 @@ done < commands.txt
 rm -f finalcommand.sh
 
 for ((i=1;i<$N+1;i++)); do
-    echo ${namescommand[${i}]} " | grep default >" $listdir"/"${names[${i}]}".list" >> finalcommand.sh
+    echo ${namescommand[${i}]} " | grep default | awk '{print \"root://eoscms/\" \$1}' >" $listdir"/"${names[${i}]}".list" >> finalcommand.sh
 done
 
 echo "NOW reading from castor. It may take time..."
