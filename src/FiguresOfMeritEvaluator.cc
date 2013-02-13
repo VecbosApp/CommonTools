@@ -3,12 +3,15 @@
 #include <iostream>
 #include "TCanvas.h"
 #include "TLegend.h"
+#include "TPaveText.h"
 #include "TStyle.h"
 #include "TString.h"
 #include "TObjArray.h"
 #include "TObjString.h"
 #include "TROOT.h"
+#include "TFile.h"
 #include <math.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -116,8 +119,10 @@ TGraphErrors* FiguresOfMeritEvaluator::getFOM1D(const char *nameVar, int option)
       else if( strcmp(cutDir,">")==0 ) {
 	tmpSignalIntegral = signal->Integral(ibin,nBinsSig+1);
 	tmpBackgroundIntegral = background->Integral(ibin,nBinsSig+1);
-      }
-      else {
+      } else if( strcmp(cutDir,"=")==0 ) {
+	tmpSignalIntegral = signal->GetBinContent(ibin);
+	tmpBackgroundIntegral = background->GetBinContent(ibin);
+      } else {
 	std::cout << "CONFIGURATION ERROR! direction of the cut not set." << std::endl
 		  << "Please use: \">\" for var>x0 or  \"<\" for var<x0" << std::endl;
 	return 0;
@@ -133,9 +138,9 @@ TGraphErrors* FiguresOfMeritEvaluator::getFOM1D(const char *nameVar, int option)
 	outGraph->SetPointError(ibin,0,0);
       }
       else if( option == 1 ) {
-	outGraph->SetPoint(ibin,signalEff,backgroundEff);
+	outGraph->SetPoint(ibin,backgroundEff,signalEff);
 	double backgroundEffErr = sqrt(backgroundEffErr*(1-backgroundEffErr)/backgroundIntegral);
-	outGraph->SetPointError(ibin,0.,backgroundEffErr);
+	outGraph->SetPointError(ibin,backgroundEffErr,0.);
       }
       else {
 	std::cout << "unrecognized option" << std::endl;
@@ -144,7 +149,7 @@ TGraphErrors* FiguresOfMeritEvaluator::getFOM1D(const char *nameVar, int option)
 
     }
   }
-
+  
   else {
     std::cout << "ERROR! Cannot find signal or background histogram for variable "
 	      << nameVar << std::endl;
@@ -273,7 +278,8 @@ TGraphErrors* FiguresOfMeritEvaluator::getFOM2D(const char *nameVar, int option)
     Double_t* y=outGraph->GetY();
     int npoints=outGraph->GetN();
     
-    float effstep=1.0/float(nXBinsSig);
+    //float effstep=1.0/float(nXBinsSig);
+    float effstep = 0.03;
     int ebin=0;
     for(float eff=m_xmin;eff<m_xmax;eff+=effstep) {
       // look for the min bkg efficiency compatible with the efficiency of the step
@@ -306,8 +312,23 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
     return;
   }
   
+  TPaveText *text = new TPaveText(0.15,0.90,0.77,0.98,"brNDC");
+  text->AddText("CMS Preliminary         #sqrt{s} = 8 TeV,  L = 19.6 fb^{-1}");
+  text->SetBorderSize(0);
+  text->SetFillStyle(0);
+  text->SetTextAlign(12);
+  text->SetTextFont(132);
+  text->SetTextSize(0.04);
 
   TCanvas c1("c1","",600,600);
+  c1.Range(-1.146789,-2319.078,5.688073,12419.95);
+  c1.SetFillColor(0);
+  c1.SetBorderMode(0);
+  c1.SetBorderSize(2);
+  c1.SetLeftMargin(0.1677852);
+  c1.SetFrameBorderMode(0);
+  c1.SetFrameBorderMode(0);
+  c1.cd();
 
   float legxmin, legxmax, legymin,legymax;
   if(option==0) {
@@ -316,10 +337,10 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
     legymin=0.20;
     legymax=0.30;
   } else {
-    legxmin=0.20;
-    legxmax=0.40;
-    legymin=0.60;
-    legymax=0.80;
+    legxmin=0.50;
+    legxmax=0.70;
+    legymin=0.20;
+    legymax=0.40;
   }
 
   TLegend* leg = new TLegend(legxmin,legymin,legxmax,legymax);
@@ -350,30 +371,50 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
   }
 
   // draw the results
+  TString fullname(fileName);
+  TObjArray *tokens = fullname.Tokenize(".");
+  const char *basename = (((TObjString*)(*tokens)[0])->GetString()).Data();
+
+  TString pdf = TString(basename)+TString(".pdf");
+  TString png = TString(basename)+TString(".png");
+  TString macro = TString(basename)+TString(".C");
+
+  TString root = TString(basename)+TString(".root");
+  TFile *tfile = TFile::Open(root,"recreate");
+
   for(int ig=0;ig<(int)graphs.size();++ig) {
     TGraphErrors* graph = graphs[ig];
     if( graph ) {
 
-
+      char nameg[50];
+      sprintf(nameg,"graph_%d",ig);
+      graph->SetName(nameg);
       graph->SetTitle("");
-      graph->SetMarkerStyle(20);
+      if(ig==0) graph->SetMarkerStyle(kFullDotMedium);
+      else if(ig==1) graph->SetMarkerStyle(kFullSquare);
+      else if(ig==2) graph->SetMarkerStyle(kFullTriangleDown);
+      else if(ig==3) graph->SetMarkerStyle(kFullTriangleUp);
+      else graph->SetMarkerStyle(kFullStar+ig);
       int defColor;
       if(ig==0) defColor=kRed+1;
       else if(ig==1) defColor=kAzure-6;
       else if(ig==2) defColor=kTeal+3;
       else if(ig==3) defColor=kViolet+3;
       else defColor = ig+1;
+      // skip yellow
+      if(defColor==5) defColor=kOrange+4;
       graph->SetMarkerColor(defColor);
+      graph->SetMarkerSize(1.4);
       graph->SetLineColor(defColor);
       graph->SetLineWidth(2);
       graph->GetXaxis()->SetRangeUser(m_xmin,m_xmax);
       graph->GetYaxis()->SetRangeUser(m_ymin,m_ymax);
       
       std::string sigSuffix = " efficiency";
-      std::string xAxisName = std::string(m_signalTitle) + sigSuffix;
+      std::string xAxisName = std::string(m_backgroundTitle) + sigSuffix;
       
       std::string bkgSuffix = (option==0) ? " rejection" : " efficiency";
-      std::string yAxisName = std::string(m_backgroundTitle) + bkgSuffix;
+      std::string yAxisName = std::string(m_signalTitle) + bkgSuffix;
       
       graph->GetXaxis()->SetTitle(xAxisName.c_str());
       graph->GetYaxis()->SetTitle(yAxisName.c_str());
@@ -384,21 +425,20 @@ void FiguresOfMeritEvaluator:: drawResults(const char *fileName, int option) {
       if(ig==0) graph->Draw("APE2");
       else  graph->Draw("PE2");
 
+      tfile->cd();
+      graph->Write();
+
     }
 
   }
   
   leg->Draw();
-  
-  TString fullname(fileName);
-  TObjArray *tokens = fullname.Tokenize(".");
-  const char *basename = (((TObjString*)(*tokens)[0])->GetString()).Data();
-
-  TString pdf = TString(basename)+TString(".pdf");
-  TString png = TString(basename)+TString(".png");
+  text->Draw();
+  tfile->Close();
 
   c1.SaveAs(pdf);
   c1.SaveAs(png);
+  c1.SaveAs(macro);
   
 }
 
@@ -423,10 +463,10 @@ void FiguresOfMeritEvaluator::AxisFonts(TAxis*  axis,
   // axis->SetLabelSize  (_axisLabelSize);
   // axis->SetNdivisions (  505);
   axis->SetTitleFont  (_labelFont);
-  // axis->SetTitleOffset(  1.5);
+  axis->SetTitleOffset(  1.5);
   // axis->SetTitleSize  (_axisLabelSize);
-  
-  //  if (coordinate == "y") axis->SetTitleOffset(_titleOffset);
+  if (coordinate == "y") axis->SetTitleOffset(1.7);
+  if (coordinate == "x") axis->SetTitleOffset(1.2);
   
   axis->SetTitle(title);
 }
